@@ -78,15 +78,19 @@ implement these data structures in JavaScript at least once for each.
 ## Timeline
 
 ### Week 13
-I suggest you to apply as many as you can before you start studying for interviews. I personally find it distracting to apply and study. Apply and finish the 150 applications, the phone screens will come, technical Interviews
-will soon follow. After every technical phone screen or on-site interview ended, keep a detailed
-documentation of the interview problems/questions and solutions. By now, you should have
-most of the algorithms covered through a/A's algorithm homework from week 12 and week 13.
+I suggest you to apply as many as you can before you start studying for interviews.
+I personally find it distracting to apply and study. Apply and finish the 150 applications,
+the phone screens will come, technical Interviews will soon follow. After every technical
+phone screen or on-site interview ended, keep a detailed documentation of the interview
+problems/questions and solutions. By now, you should have most of the algorithms covered through
+a/A's algorithm homework from week 12 and week 13.
 
-### [Week 1][week1]
+### Week 1
 The first week of independent study, which is week 14 in a/A's calendar
-
+Start watching Algorithm Part 1 on Coursera for Stacks & Queues, Elementary Sorts,
+Merge Sort, and Quick Sort. Go 2x speed.
 #### Topics
+- Java Basics
 - Static Array
 - Dynamic Array or ArrayList(Java)
 - Stacks and Queues
@@ -98,11 +102,10 @@ The first week of independent study, which is week 14 in a/A's calendar
 - Quick Sort
 - Merge Sort
 
-[week1]:./week1.md
+[java]: ./java.md
 
-### [Week 2][week2]
-This is the tree week
-
+### Week 2
+The tree week
 #### Topics
 - Binary Heap
 - Heap Sort
@@ -116,8 +119,8 @@ This is the tree week
 - Topological Sort
 - Dijkstra's Algorithm
 
-[week2]:./week2.md
-
-### [Week 3][week3]
-
-[week3]:./week3.md
+### Week 3
+#### Topics
+- Prefix Tree
+- Suffix Tree
+- Dynamic Programming

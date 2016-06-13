@@ -1,6 +1,6 @@
 # Interview Problems
 
-## Blend
+#Blend
 Write a function to check whether a binary tree is mirrored
 
 ``` ruby
