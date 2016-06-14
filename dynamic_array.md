@@ -1,11 +1,90 @@
-# Dynamic Array (Ring Buffer)
+## Dynamic Array (Ring Buffer)
+``` ruby
+class DynamicArray
+  attr_reader :length
 
+  def initialize(size = 8)
+    @store = StaticArray.new(size)
+    @start_idx = 0
+    @length = 0
+    @capacity = size
+  end
 
+  # O(1)
+  def [](index)
+    if index >= length
+      raise "index out of bounds"
+    end
+    @store[self.check_index(index)]
+  end
 
+  # O(1)
+  def []=(index, value)
+    @store[self.check_index(index)] = value
+  end
 
+  # O(1)
+  def pop
+    if @length == 0
+      raise "index out of bounds"
+    end
+    @length -= 1
+    @store[self.check_index(@length)]
+  end
 
-# Interview Problems
+  # O(1) amortized; O(n) worst case.
+  def push(val)
+    if @length == @capacity
+      self.resize!
+    end
+    @store[self.check_index(@length)] = val
+    @length += 1
+  end
 
+  # O(1)
+  def shift
+    if @length == 0
+      raise "index out of bounds"
+    end
+    val = @store[@start_idx]
+    @start_idx = (@start_idx + 1) % @capacity
+    @length -= 1
+    val
+  end
+
+  # O(1) ammortized
+  def unshift(val)
+    if @length == @capacity
+      self.resize!
+    end
+    @length += 1
+    @start_idx = (@start_idx - 1) % @capacity
+    @store[@start_idx] = val
+  end
+
+  protected
+  attr_accessor :capacity, :start_idx, :store
+  attr_writer :length
+
+  def check_index(index)
+    (@start_idx + index) % @capacity
+  end
+
+  def resize!
+    new_store = StaticArray.new(2*@capacity)
+    i = 0
+    while i < @length
+      new_store[i] = @store[(@start_idx + i) % capacity]
+      i += 1
+    end
+    @capacity *= 2
+    @start_idx = 0
+    @store = new_store
+  end
+
+end
+```
+## Interview Problems
 `is_unique` - implement an algorithm to determine if a string has all unique
 characters. What if you cannot use additional data structure?
 ``` ruby

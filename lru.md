@@ -1,5 +1,5 @@
-# Least Recently Use LRU Cache
-## Key Idea
+## Least Recently Use LRU Cache
+### Key Idea
 It uses HashMap and LinkedList. Every key in the HashMap points to a single
 link. The links form a LinkedList. The list is used for preserving the chronological order of the links. The head is the least recently used link, while the tail is the most recently used link. HashMap is used for fast retrieval.
 

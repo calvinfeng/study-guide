@@ -1,4 +1,4 @@
-# Hash map
+## Hash map
 
 ``` ruby
 class HashMap
@@ -70,4 +70,4 @@ class HashMap
     @store[key.hash % num_buckets]
   end
 end
-``` 
+```
