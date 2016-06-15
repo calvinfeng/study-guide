@@ -113,10 +113,10 @@ Merge Sort, and Quick Sort. Go 2x speed.
 ### Week 2
 The tree week
 #### Topics
-- Binary Heap
+- [Binary Heap][binary_heap]
 - Heap Sort
-- Binary Search Tree
-- Graph
+- [Binary Search Tree][bst]
+- [Graph][graph]
 - Breadth-first Search
 - Depth-first Search
 - Tree Traversals
@@ -124,6 +124,15 @@ The tree week
 - Adjacency Matrix
 - Topological Sort
 - Dijkstra's Algorithm
+
+[binary_heap]: ./binary_heap.md
+[bst]: ./binary_search_tree.md
+[graph]: ./graph.md
+[bfs]: ./breadth_first_search.md
+[dfs]: ./depth_first_search.md
+[topo]: ./topological_sort.md
+[dijkstra]: ./dijsktra.md
+
 
 ### Week 3
 #### Topics

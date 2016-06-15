@@ -16,4 +16,25 @@ class MergeSort
   end
 end
 
-p MergeSort.sort([4,1,5,9,9,0,5,9,8,8])
+def binary_search(sorted_arr, target)
+  return nil if sorted_arr.empty?
+
+  probe_idx = sorted_arr.length/2
+  case target <=> sorted_arr[probe_idx]
+  when -1
+    # Search in left
+    binary_search(sorted_arr.take(probe_idx), target)
+  when 0
+    # Target is found
+    probe_idx
+  when 1
+    # Search in right
+    # Make sure to put in offset for the index
+    sub_answer = binary_search(sorted_arr.drop(probe_idx + 1), target)
+    if sub_answer.nil?
+      nil
+    else
+      probe_idx + 1 + sub_answer
+    end
+  end
+end
