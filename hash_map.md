@@ -1,5 +1,6 @@
-## Hash map
+# Hash map
 
+## Implementation
 ``` ruby
 class HashMap
   include Enumerable

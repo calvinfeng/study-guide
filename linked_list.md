@@ -1,4 +1,6 @@
-## Linked List
+# Linked List
+
+## Implementation
 ``` ruby
 class Link
   attr_accessor :key, :val, :next, :prev
@@ -120,9 +122,62 @@ end
 of a singly linked list
 ``` ruby
 # Assume that we don't know the size of the linked list. First compute its size
-# by going through the list. Then find the k-th element.
+# by going through the list. Then find the k-th element. The more optimal one
+# would be creating two pointers. We place them k nodes apart. Then, when
+# we move them at the same pace, p2 will hit the end and p1 will be the target
+
+# 01 02 03 04 05 06 07 08 09
+# p1    p2
+#    p2    p2
+# ...
+#                   p1    p2
+def return_kth_to_last(k, list)
+  p1 = list.first
+  p2 = list.first
+
+  i = 0
+  while i < k
+    return nil if p2 == nil
+    p2 = p2.next
+    i += 1
+  end
+
+  while p2 != list.last
+    p1 = p1.next
+    p2 = p2.next
+  end
+  p1
+end
 ```
 
-`delete_middle_node` - implement an algorithm to delete a node in the middle
-(i.e. any node but the first and last node, not necessarily the exact middle)
-of a singly linked list, gien
+`sum_lists` - you have two numbers represented by a linked list, where each node
+contains a single digit. The digits are stored in reverse order, such that
+1's digit is at the head of the list. Write a function that adds the two
+numbers and returns the sum as a linked list.
+Example:
+Input: (7 -> 1 -> 6) + (5 -> 9 -> 2) = 617 + 295
+
+``` ruby
+def sum_lists(list1, list2)
+  resultant_list = LinkedList.new
+  runner1 = list1.head
+  runner2 = list2.head
+  carry_over = 0
+  until runner1.nil? && runner2.nil?
+    if runner1.nil?
+      digit_sum = runner2.value + carry_over
+    elsif runner2.nil?
+      digit_sum = runner1.value + carry_over
+    else
+      digit_sum = runner1.value + runner2.value + carry_over
+    end
+    carry_over = digit_sum/10
+    digit_sum = digit_sum % 10
+    resultant_list.insert(digit_sum)
+
+    runner1 = runner1.next
+    runner2 = runner2.next
+  end
+  resultant_list
+end
+```

@@ -1,4 +1,4 @@
-## Binary Search tree
+# Binary Search tree
 Primary API:
 * #insert - O(log n)
 * #find - O(log n)
@@ -10,6 +10,7 @@ Primary API:
 * #postorder
 * #pre-order
 
+## Implementation
 ``` ruby
 class BSTNode
   attr_accessor :left, :right

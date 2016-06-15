@@ -1,4 +1,6 @@
-## Dynamic Array (Ring Buffer)
+# Dynamic Array (Ring Buffer)
+
+## Implementation
 ``` ruby
 class DynamicArray
   attr_reader :length
@@ -161,5 +163,17 @@ def rotate_matrix(mat)
   end
 
   rotated_mat
+end
+```
+
+`is_palindrome` - check if a string is a palindrome by using recursion
+``` ruby
+def is_palindrome?(str)
+  return true if str.length <= 1
+  if str[0] == str[str.length - 1]
+    is_palindrome?(str[1...str.length - 1])
+  else
+    return false
+  end
 end
 ```

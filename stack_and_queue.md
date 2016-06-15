@@ -3,6 +3,7 @@ Stack and queue can be implemented with just an array but,
 * Stack can only push and pop
 * Queue can only push and shift
 
+## Implementation
 ``` ruby
 class Stack
   def initialize
@@ -32,3 +33,4 @@ class Queue
   end
 end
 ```
+## Interview Problem
