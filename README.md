@@ -57,7 +57,7 @@ implement these data structures in JavaScript at least once for each.
 - [ ] Depth-first Search
 
 ### Sorting
-- [ ] Quick Sort (Partition Subroutine)
+- [x] Quick Sort (Partition Subroutine)
 - [ ] Merge Sort
 - [x] Heap Sort
 
@@ -96,16 +96,19 @@ Merge Sort, and Quick Sort. Go 2x speed.
 - [LinkedList][linked_list]
 - [HashMap][hash_map]
 - [LRU Cache][lru]
-- Binary Search
-- Quick Sort
-- Merge Sort
+- [Binary Search][binary_search]
+- [Quick Sort][quick_sort]
+- [Merge Sort][merge_sort]
 
-[linked_list]: ./linked_list.md
+[dynamic_array]: ./dynamic_array.md
 [stack_and_queue]: ./stack_and_queue.md
 [stack_queue]: ./stack_queue.md
+[linked_list]: ./linked_list.md
 [hash_map]: ./hash_map.md
 [lru]: ./lru.md
-[dynamic_array]: ./dynamic_array.md
+[binary_search]: ./binary_search.md
+[quick_sort]: ./quick_sort.md
+[merge_sort]: ./merge_sort.md
 
 ### Week 2
 The tree week

@@ -1,3 +1,7 @@
+# Merge Sort
+
+## Implementation
+``` ruby
 class MergeSort
   def self.sort(array)
     return array if array.length < 2
@@ -15,5 +19,4 @@ class MergeSort
     merged_array + left + right
   end
 end
-
-p MergeSort.sort([4,1,5,9,9,0,5,9,8,8])
+```
