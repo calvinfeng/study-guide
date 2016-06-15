@@ -116,12 +116,10 @@ The tree week
 - [Binary Heap][binary_heap]
 - Heap Sort
 - [Binary Search Tree][bst]
-- [Graph][graph]
+- [Graph, Adjacency List, and Adjacency Matrix][graph]
 - Breadth-first Search
 - Depth-first Search
 - Tree Traversals
-- Adjacency List
-- Adjacency Matrix
 - Topological Sort
 - Dijkstra's Algorithm
 
