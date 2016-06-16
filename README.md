@@ -52,13 +52,13 @@ implement these data structures in JavaScript at least once for each.
 ## Algorithms
 
 ### Search
-- [ ] Binary Search
-- [ ] Breadth-first Search
-- [ ] Depth-first Search
+- [x] Binary Search
+- [x] Breadth-first Search
+- [x] Depth-first Search
 
 ### Sorting
 - [x] Quick Sort (Partition Subroutine)
-- [ ] Merge Sort
+- [x] Merge Sort
 - [x] Heap Sort
 
 ### Graphs
