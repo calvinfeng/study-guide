@@ -33,16 +33,16 @@ class Edge
   end
 end
 
-def dfs(node, target)
-  return nil if node.nil? || node.visited?
-  node.visit!
-  return node if node.value == target
-
-  node.out_edges.each do |out_edge|
-    search_result = dfs(out_edge.to_vertex, target)
-    return search_result unless search_result.nil?
+def bfs(node, target)
+  queue = [node]
+  until queue.empty?
+    probe = queue.shift
+    probe.visit!
+    return probe if probe.value == target
+    probe.out_edges.each do |edge|
+      queue << edge.to_vertex unless edge.to_vertex.visited?
+    end
   end
-
   nil
 end
 
@@ -51,15 +51,25 @@ v2 = Vertex.new("Steven")
 v3 = Vertex.new("Matt")
 v4 = Vertex.new("Loki")
 e1 = Edge.new(v1, v2)
-e6 = Edge.new(v1, v4)
-e2 = Edge.new(v2, v3)
-e3 = Edge.new(v2, v1)
-e4 = Edge.new(v3, v1)
-e5 = Edge.new(v3, v4)
+e6 = Edge.new(v1, v3)
+e2 = Edge.new(v2, v4)
+e4 = Edge.new(v4, v1)
+e5 = Edge.new(v4, v2)
 
-result = dfs(v1, "Steven")
+result = bfs(v1, "Loki")
 p result.value
 p v1.visited?
 p v2.visited?
 p v3.visited?
 p v4.visited?
+# def bfs(root, target)
+#   queue = [root]
+#   until queue.empty?
+#     probe = queue.shift
+#     return probe if probe.value == target
+#     probe.children.each do |child|
+#       queue << child
+#     end
+#   end
+#   nil
+# end

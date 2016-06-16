@@ -57,7 +57,7 @@ e3 = Edge.new(v2, v1)
 e4 = Edge.new(v3, v1)
 e5 = Edge.new(v3, v4)
 
-result = dfs(v1, "Steven")
+result = dfs(v1, "Loki")
 p result.value
 p v1.visited?
 p v2.visited?

@@ -53,7 +53,14 @@ end
 ```
 `partition` will iterate through every index. Whenever `array[idx]` is greater
 than the pivot. It will first get replaced  with the element after pivot, which
-is `array[pivot_idx + 1]`.
-Then the pivot will take over the spot at `array[pivot_idx + 1]`.
+is `array[pivot_idx + 1]`. Then the pivot will take over the spot at `array[pivot_idx + 1]`.
 
 At last, put the value in pivot's origin position which is `array[pivot_idx]`.
+
+### Tail Recursion
+Answer from Quora: 
+Tail recursion is a special kind of recursion where the recursive call is the very last thing in the function. It's a function that does not do anything at all after recursing.
+
+This is important because it means that you can just pass the result of the recursive call through directly instead of waiting for it—you don't have to consume any stack space. A normal function, on the other hand, has to have a stack frame so that the compiler knows to come back to it (and have all the necessary variable values) after the recursive call is finished.
+
+Some languages recognize this and implement "proper tail calls" or "tail call elimination": if they see a recursive call in tail position, they actually compile it into a jump that reuses the current stack frame instead of calling the function normally. This improves the memory usage of the function asymptotically and prevents it from overflowing the stack. With this behavior, tail recursion is actually generally a good thing: chances are you do want to write your functions in a tail-recursive form if you can.

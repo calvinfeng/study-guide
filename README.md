@@ -117,9 +117,9 @@ The tree week
 - Heap Sort
 - [Binary Search Tree][bst]
 - [Graph, Adjacency List, and Adjacency Matrix][graph]
-- Breadth-first Search
-- Depth-first Search
-- Tree Traversals
+- [Breadth-first Search][bfs]
+- [Depth-first Search][dfs]
+- [Tree Traversals][tree_traversal]
 - Topological Sort
 - Dijkstra's Algorithm
 
@@ -128,9 +128,9 @@ The tree week
 [graph]: ./graph.md
 [bfs]: ./breadth_first_search.md
 [dfs]: ./depth_first_search.md
+[tree_traversal]: ./tree_traversal.md
 [topo]: ./topological_sort.md
 [dijkstra]: ./dijsktra.md
-
 
 ### Week 3
 #### Topics

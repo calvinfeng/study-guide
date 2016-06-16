@@ -1,3 +1,24 @@
+# Depth First Search (Tree & Graph)
+
+## Implementation (Tree)
+This is the tree version. The search begins at the root and then traverse
+down to its children. When leaf node is reached, there is no children, the
+recursive step will terminate. It will return early once target is found.
+``` ruby
+def dfs(root, target)
+  return nil if root.nil?
+  root.children.each do |child|
+    search_result = dfs(child, target)
+    return search_result unless search_result.nil?
+  end
+  nil
+end
+```
+
+## Implementation (Graph)
+This is the graph version, which is just a slight modification of the tree
+version
+``` ruby
 class Vertex
   attr_accessor :value, :in_edges, :out_edges
   def initialize(value)
@@ -45,21 +66,4 @@ def dfs(node, target)
 
   nil
 end
-
-v1 = Vertex.new("Calvin")
-v2 = Vertex.new("Steven")
-v3 = Vertex.new("Matt")
-v4 = Vertex.new("Loki")
-e1 = Edge.new(v1, v2)
-e6 = Edge.new(v1, v4)
-e2 = Edge.new(v2, v3)
-e3 = Edge.new(v2, v1)
-e4 = Edge.new(v3, v1)
-e5 = Edge.new(v3, v4)
-
-result = dfs(v1, "Steven")
-p result.value
-p v1.visited?
-p v2.visited?
-p v3.visited?
-p v4.visited?
+```
