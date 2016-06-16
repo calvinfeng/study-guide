@@ -1,5 +1,17 @@
 # Topological Sort & Directed Graphs
 
+## Directed Graphs API
+* `#initialize(num_of_vertices)` - create an empty diagraph with numbers of
+vertices
+* `#addEdge(v, w)` - connect two nodes/vertices together with direction,
+from v -> w
+* `#adjList(v)` - return vertices pointing from v
+* `#v_count` - return number of vertices
+* `#e_count` - return number of edges
+
+## DFS Topological Sort
+Coming soon...
+
 ## Kahn's Algorithm
 A zero degree vertex is a vertex that has no dependency. It's like taking
 classes in college. If a course has no pre-requisite, it has zero degree of
@@ -45,3 +57,30 @@ def topological_sort(vertices)
   sorted_vertices
 end
 ```
+## Strongly Connected
+The idea of strongly connected component is unique to digraphs. A single
+directed connection between two vertices is not enough to constitute a
+strong connection, that makes a connection (or connected component) but not
+a strongly connected component
+
+Definition: *v* and *w* are strongly connected if there is a directed path
+from *v* to *v* and a directed path
+
+![strongly_connected][scc]
+[scc]: ./img/strongly_connected.png
+
+A-B-C are strongly connected components because A can get to B, B can get to A, B can get to C and C can get to B, and etc...
+
+However, A-B-C can get to D-E-F-G but D-E-F-G can't get back to A-B-C so they are not strongly connected.
+
+## Kosaraju-Sharir Algorithm
+* Reverse graph: strong components in G are the same as in G reversed
+* Kernal DAG: contract each strong component into a single vertex
+* Idea:
+  * compute topological order (reverse postorder) in kernel DAG
+  * run DFS, considering vertices in reverse topological order
+
+Phase 1: run DFS on reversed G to compute reverse postorder
+
+Phase 2: run DFS on original G, considering vertices in order given by
+first DFS from Phase 1.

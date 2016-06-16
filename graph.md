@@ -3,7 +3,7 @@ There are two kinds of graphs, directed and undirected. Since we are specifying
 the directions of edges (i.e. inward and outward,) we are talking about
 directed graphs here. But we can always generalize the data structure to be
 undirected by making sure the edges go both ways. However, topological sort
-requires acyclic directed graphs. 
+requires directed acyclic graphs.
 
 Two vertices are *connected* if there is a path between them. The edge typically
 carries information of the cost or distance of the path.
