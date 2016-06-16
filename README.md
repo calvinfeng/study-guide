@@ -34,17 +34,17 @@ Rails project.
 [hacker]: https://news.ycombinator.com/
 
 ## Data Structures
-- [x] Stack & Queue
-- [x] LinkedList
-- [x] HashMap
-- [x] LRU Cache (Using LinkedList & HashMap)
-- [x] Dynamic Array (Ring Buffer)
-- [x] Binary Heap (Without decrease-key)
-- [x] Binary Search Tree
+- [x] [Stack & Queue][stack_and_queue]
+- [x] [LinkedList][linked_list]
+- [x] [HashMap][hash_map]
+- [x] [LRU Cache (Using LinkedList & HashMap)][lru]
+- [x] [Dynamic Array (Ring Buffer)][dynamic_array]
+- [x] [Binary Heap (Without decrease-key)][binary_heap]
+- [x] [Binary Search Tree][bst]
   - [x] Optional: AVL, 2-3 Tree, Red-Black Tree
 - [ ] Prefix Tree
 - [ ] Suffix Tree
-- [x] Directed & Undirected Graphs
+- [x] [Directed & Undirected Graphs][graph]
 
 AppAcademy had you implemented them in Ruby. For those who are interested in front-end role,
 implement these data structures in JavaScript at least once for each.
@@ -52,20 +52,20 @@ implement these data structures in JavaScript at least once for each.
 ## Algorithms
 
 ### Search
-- [x] Binary Search
-- [x] Breadth-first Search
-- [x] Depth-first Search
+- [x] [Binary Search][binary_search]
+- [x] [Breadth-first Search][bfs]
+- [x] [Depth-first Search][dfs]
 
 ### Sorting
-- [x] Quick Sort (Partition Subroutine)
-- [x] Merge Sort
+- [x] [Quick Sort (Partition Subroutine)][quick_sort]
+- [x] [Merge Sort][merge_sort]
 - [x] Heap Sort
 
 ### Graphs
-- [x] Tree Traversals (Pre-order, In-order, Post-order)
+- [x] [Tree Traversals (Pre-order, In-order, Post-order)][tree_traversal]
 - [x] Objected-oriented Adjacency List
 - [x] Adjacency Matrix
-- [x] Topological Sort (Kahn's Algorithm)
+- [x] [Topological Sort (Kahn's Algorithm)][topo]
 - [x] Topological Sort (Tarjan's Algorithm)
 - [x] Dijkstra's Algorithm (Use PriorityQueue without decrease-key)
 
@@ -120,7 +120,7 @@ The tree week
 - [Breadth-first Search][bfs]
 - [Depth-first Search][dfs]
 - [Tree Traversals][tree_traversal]
-- Topological Sort
+- [Topological Sort][topo]
 - Dijkstra's Algorithm
 
 [binary_heap]: ./binary_heap.md
