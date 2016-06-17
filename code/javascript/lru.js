@@ -1,4 +1,4 @@
-var LinkedList = require('./linked_list.js');
+var LinkedList = require('./linked-list.js');
 
 function LRUCache(max, cb) {
   this.map = {};
@@ -25,7 +25,7 @@ LRUCache.prototype.get = function(key) {
 };
 
 LRUCache.prototype.calc = function(key) {
-  var val = this.cb.call(key);
+  var val = this.cb(key);
   var newLink = this.store.insert(key, val);
   this.map[key] = newLink;
 
@@ -55,10 +55,11 @@ LRUCache.prototype.eject = function() {
   return null;
 };
 
+//======================= TEST =========================================
 var cache = new LRUCache(5, function(key){
   var i = 0;
-  while (i < 2000000000) {
-    //do nothing basically
+  // BLOCK THE DOOOOOOOMMMMMMM!
+  while (i < 1000000000) {
     i += 1;
   }
   return key;
@@ -67,3 +68,4 @@ var cache = new LRUCache(5, function(key){
 console.log(cache.get(1));
 console.log(cache.get(2));
 console.log(cache.get(1));
+console.log(cache.get(3));

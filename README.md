@@ -42,7 +42,7 @@ Rails project.
 - [x] [Binary Heap (Without decrease-key)][binary_heap]
 - [x] [Binary Search Tree][bst]
   - [x] Optional: AVL, 2-3 Tree, Red-Black Tree
-- [ ] Prefix Tree
+- [ ] [Trie][trie]
 - [ ] Suffix Tree
 - [x] [Directed & Undirected Graphs][graph]
 
@@ -59,6 +59,7 @@ implement these data structures in JavaScript at least once for each.
 ### Sorting
 - [x] [Quick Sort (Partition Subroutine)][quick_sort]
 - [x] [Merge Sort][merge_sort]
+- [x] [Radix Sort][radix]
 - [x] Heap Sort
 
 ### Graphs
@@ -134,6 +135,10 @@ The tree week
 
 ### Week 3
 #### Topics
-- Prefix Tree
+- [Trie or Prefix Tree][trie]
+- [Radix][radix]
 - Suffix Tree
 - Dynamic Programming
+
+[trie]: ./trie.md
+[radix]: ./radix.md
