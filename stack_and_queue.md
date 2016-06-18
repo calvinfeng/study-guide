@@ -72,4 +72,56 @@ stacks and should create a new stack once the previous one exceeds capacity.
 a single stack.
 Follow-up: Implement a function popAt(idx) which performs a pop operation
 on a specific sub-stack.
-`
+
+``` ruby
+class SetOfStacks
+  def initialize(cap = 10)
+    @cap = cap
+    @store = []
+  end
+
+  def push(val)
+    if @store.empty? || @store.last.length == @cap
+      @store << [val]
+    else
+      @store.last << val
+    end
+  end
+
+  def pop(val)
+    raise "index out of bound" if @store.empty?
+    if @store.last.empty?
+      @store.pop
+      @store.last.pop
+    else
+      @store.last.pop
+    end
+  end
+
+  def popAt(idx)
+    @store[idx].pop
+  end
+end
+```
+
+__Queue via Stack__ - Implement a `MyQueue` class which implements a queue
+using two stacks.
+``` ruby
+# This is basically a stack queue
+class MyQueue
+  def initialize
+    @in, @out = [], []
+  end
+
+  def enqueue(value)
+    @in << value
+  end
+
+  def dequeue
+    if @out.empty?
+      @out << @in.pop until @in.empty?
+    end
+    @out.pop
+  end
+end
+```
