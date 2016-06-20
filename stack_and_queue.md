@@ -33,8 +33,8 @@ class Queue
   end
 end
 ```
-## Interview Problem
 
+## Interview Problem
 __Stack Min__ - How would you design a stack which, in addition to push and pop,
 has a function `min` which returns the minimum element? Write a class for it
 ``` ruby

@@ -26,7 +26,7 @@ represent numbers in positional numeral system.
 
 Lower bound: ~ N log(N) compares required by any compare-based algorithms
 
-Can we do better? Yes if we don't depend on key compares.
+Can we do better? Yes if we don't depend on comparing keys.
 
 ## Key-indexed Counting
 Assumption: keys are integers between 0 and R - 1
@@ -48,6 +48,11 @@ for (int i = 0; i < N; i++) aux[count[a[i]]++] = a[i];
 for (int i = 0; i < N; i++) a[i] = aux[i];
 ```
 
+It takes O(n) to iterate through the array once and count their frequency
+of appearance with a counter array/hash.
+It takes O(R + n) to go through the second loop. It has check O(R) times
+for the if-statement and (in this case) within those 256 if-statements, it
+has to push the elements *n* times into the final array. 
 ``` ruby
 def key_indexed_count(arr)
   # ASCII character has a radix of 256

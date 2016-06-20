@@ -65,7 +65,8 @@ def fibonacci(n)
 end
 ```
 
-## Suffix Tree
+## LCS: Longest Common Subsequence
+ 
 ``` ruby
 # Write a function, common_substrings(str1, str2) that takes two strings and returns
 # the longest common substring. This is known as the LCS problem. (NP-hard)

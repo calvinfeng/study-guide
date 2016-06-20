@@ -25,3 +25,9 @@ def binary_search(sorted_arr, target)
   end
 end
 ```
+
+## Interview Problems
+`three_sum` - Write a function to determine whether any 3 elements in an
+array sum to zero or any target. Brute force will take O(n^3) time, a better
+solution will take O(n^2 log(n)) time. An even better solution will take O(n^2) time
+with O(n) space.
