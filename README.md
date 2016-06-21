@@ -7,14 +7,13 @@ on his personal blog site. This guide focuses on time management and examples of
 implementation details of the materials. However, please read Haseeb's guide at least
 once and follow his advice. I simply took his suggestions and added more details to
 them, just so I can get the practice from writing them.
+[haseeb]: http://haseebq.com/#general-study
 
 This study guide is more tailored toward companies who ask abstract algorithmic
 problems. Small startups tend to ask you to build a small project or try to debug
 their production code. For those cases, I think AppAcademy has prepared you well.
 If you are still not confident, go out and build more JavaScript games or another
 Rails project.
-
-[haseeb]: http://haseebq.com/#general-study
 
 ## Key Resources
 * Cracking the Coding Interview 6th Edition
@@ -77,19 +76,10 @@ implement these data structures in JavaScript at least once for each.
 
 ## Timeline
 
-### Week 13
-I suggest you to apply as many as you can before you start studying for interviews.
-I personally find it distracting to apply and study. Apply and finish the 150 applications,
-the phone screens will come, technical Interviews will soon follow. After every technical
-phone screen or on-site interview ended, keep a detailed documentation of the interview
-problems/questions and solutions. By now, you should have most of the algorithms covered through
-a/A's algorithm homework from week 12 and week 13.
-
 ### Week 1
 The first week of independent study, which is week 14 in a/A's calendar
 Start watching Algorithm Part 1 on Coursera for Stacks & Queues, Elementary Sorts,
 Merge Sort, and Quick Sort. Go 2x speed.
-
 #### Topics
 - [Dynamic Array or ArrayList(Java)][dynamic_array]
 - [Stack and Queue][stack_and_queue]
@@ -100,17 +90,6 @@ Merge Sort, and Quick Sort. Go 2x speed.
 - [Binary Search][binary_search]
 - [Quick Sort][quick_sort]
 - [Merge Sort][merge_sort]
-
-[dynamic_array]: ./dynamic_array.md
-[stack_and_queue]: ./stack_and_queue.md
-[stack_queue]: ./stack_queue.md
-[linked_list]: ./linked_list.md
-[hash_map]: ./hash_map.md
-[lru]: ./lru.md
-[binary_search]: ./binary_search.md
-[quick_sort]: ./quick_sort.md
-[merge_sort]: ./merge_sort.md
-
 ### Week 2
 The tree week
 #### Topics
@@ -122,24 +101,32 @@ The tree week
 - [Depth-first Search][dfs]
 - [Tree Traversals][tree_traversal]
 - [Topological Sort][topo]
-- Dijkstra's Algorithm
-
-[binary_heap]: ./binary_heap.md
-[bst]: ./binary_search_tree.md
-[graph]: ./graph.md
-[bfs]: ./breadth_first_search.md
-[dfs]: ./depth_first_search.md
-[tree_traversal]: ./tree_traversal.md
-[topo]: ./topological_sort.md
-[dijkstra]: ./dijsktra.md
-
 ### Week 3
 #### Topics
+- [Dijkstra's Algorithm][dijkstra]
+- [Suffix Tree]
 - [Trie or Prefix Tree][trie]
 - [Radix][radix]
-- Suffix Tree
 - [Dynamic Programming][dynamic]
 
-[trie]: ./trie.md
-[radix]: ./radix.md
+
+[bfs]: ./breadth_first_search.md
+[binary_heap]: ./binary_heap.md
+[binary_search]: ./binary_search.md
+[bst]: ./binary_search_tree.md
+[dfs]: ./depth_first_search.md
+[dijkstra]: ./dijsktra.md
+[dynamic_array]: ./dynamic_array.md
 [dynamic]: ./dynamic_programming.md
+[graph]: ./graph.md
+[hash_map]: ./hash_map.md
+[linked_list]: ./linked_list.md
+[lru]: ./lru.md
+[merge_sort]: ./merge_sort.md
+[quick_sort]: ./quick_sort.md
+[radix]: ./radix.md
+[stack_and_queue]: ./stack_and_queue.md
+[stack_queue]: ./stack_queue.md
+[tree_traversal]: ./tree_traversal.md
+[trie]: ./trie.md
+[topo]: ./topological_sort.md

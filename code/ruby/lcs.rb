@@ -70,17 +70,17 @@ end
 dna_letters = ["a", "c", "g", "t"]
 dna1 = ""
 dna2 = ""
-10.times do |i|
+23.times do |i|
   dna1 << dna_letters[rand(4)]
   dna2 << dna_letters[rand(4)]
 end
 # dna1 = "acbcefg"
 # dna2 = "abcdaefg"
 
-puts dna1
-puts dna2
-puts Benchmark.measure { p dynamic_lcs(dna1, dna2) }
-puts Benchmark.measure { p brute_force_lcs(dna1, dna2) }
+# puts dna1
+# puts dna2
+# puts Benchmark.measure { p dynamic_lcs(dna1, dna2) }
+# puts Benchmark.measure { p brute_force_lcs(dna1, dna2) }
 
 #=======================================================================
 # Longest Common Substrings
@@ -109,3 +109,6 @@ def longest_common_substr(str1, str2)
   end
   curr_longest
 end
+
+puts Benchmark.measure { substrings(dna1) }
+puts Benchmark.measure { subseqs(dna1) }
