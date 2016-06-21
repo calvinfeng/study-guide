@@ -42,7 +42,7 @@ Rails project.
 - [x] [Binary Search Tree][bst]
   - [x] Optional: AVL, 2-3 Tree, Red-Black Tree
 - [x] [Directed & Undirected Graphs][graph]
-- [ ] [Trie][trie]
+- [x] [Tries][trie]
 - [ ] Suffix Tree
 
 AppAcademy had you implemented them in Ruby. For those who are interested in front-end role,
@@ -80,6 +80,7 @@ implement these data structures in JavaScript at least once for each.
 The first week of independent study, which is week 14 in a/A's calendar
 Start watching Algorithm Part 1 on Coursera for Stacks & Queues, Elementary Sorts,
 Merge Sort, and Quick Sort. Go 2x speed.
+
 #### Topics
 - [Dynamic Array or ArrayList(Java)][dynamic_array]
 - [Stack and Queue][stack_and_queue]
@@ -90,6 +91,7 @@ Merge Sort, and Quick Sort. Go 2x speed.
 - [Binary Search][binary_search]
 - [Quick Sort][quick_sort]
 - [Merge Sort][merge_sort]
+
 ### Week 2
 The tree week
 #### Topics
@@ -101,6 +103,7 @@ The tree week
 - [Depth-first Search][dfs]
 - [Tree Traversals][tree_traversal]
 - [Topological Sort][topo]
+
 ### Week 3
 #### Topics
 - [Dijkstra's Algorithm][dijkstra]
