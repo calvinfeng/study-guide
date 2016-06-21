@@ -19,7 +19,7 @@ def dynamic_lcs(str1, str2)
   0.upto(str1.length) do |i|
     0.upto(str2.length) do |j|
       unless i == 0 || j == 0
-        if str1[i] != nil && str2[j] != nil && str1[i-1] == str2[j-1]
+        if str1[i-1] != nil && str2[j-1] != nil && str1[i-1] == str2[j-1]
           c[i][j][:value] = c[i-1][j-1][:value] + 1
           c[i][j][:subseq] = c[i-1][j-1][:subseq] + str1[i-1]
         elsif c[i][j-1][:value] > c[i-1][j][:value]
@@ -32,11 +32,8 @@ def dynamic_lcs(str1, str2)
       end
     end
   end
+  printMatrix(c)
   c[str1.length][str2.length]
-end
-
-def recursive_lcs(str1, str2)
-
 end
 
 def printMatrix(mat)
@@ -49,6 +46,43 @@ def printMatrix(mat)
   end
 end
 
+def brute_force_lcs(str1, str2)
+  subseqs1 = subseqs(str1)
+  subseqs2 = subseqs(str2)
+  longest_subseq = ""
+  subseqs1.each do |sub1|
+    subseqs2.each do |sub2|
+      if sub1 == sub2 && sub1.length > longest_subseq.length
+        longest_subseq = sub1
+      end
+    end
+  end
+  longest_subseq
+end
+
+def subseqs(str)
+  return [str] if str.length == 1
+  subseqs(str[0...str.length - 1]).map {|el| el + str[str.length - 1]} +
+  subseqs(str[0...str.length - 1]) +
+  [str[-1]]
+end
+
+dna_letters = ["a", "c", "g", "t"]
+dna1 = ""
+dna2 = ""
+10.times do |i|
+  dna1 << dna_letters[rand(4)]
+  dna2 << dna_letters[rand(4)]
+end
+# dna1 = "acbcefg"
+# dna2 = "abcdaefg"
+
+puts dna1
+puts dna2
+puts Benchmark.measure { p dynamic_lcs(dna1, dna2) }
+puts Benchmark.measure { p brute_force_lcs(dna1, dna2) }
+
+#=======================================================================
 # Longest Common Substrings
 # Brute force
 def substrings(str)
@@ -75,14 +109,3 @@ def longest_common_substr(str1, str2)
   end
   curr_longest
 end
-
-dna_letters = ["A", "C", "G", "T"]
-dna1 = ""
-dna2 = ""
-10.times do |i|
-  dna1 << dna_letters[rand(4)]
-  dna2 << dna_letters[rand(4)]
-end
-puts dna1
-puts dna2
-puts Benchmark.measure { p dynamic_lcs(dna1, dna2)}
