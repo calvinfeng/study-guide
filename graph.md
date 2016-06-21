@@ -184,3 +184,76 @@ class ConnectedComponent
   end
 end
 ```
+
+## Interivew Problems
+__Route Between Nodes__: Given a directed graph, design an algorithm to find out
+whether there is a route between two nodes
+``` ruby
+def is_there_route?(source, dest)
+  dfs(source, dest) == dest
+end
+
+def dfs(node, target)
+  return nil if node.nil? || node.visit?
+  node.visit!
+  return node if node == target
+  node.out_edges.each do |out_edge|
+    search_result = dfs(out_edge.to_vertex, target)
+    return search_result unless search_result.nil?
+  end
+  nil
+end
+```
+
+__Minimal Tree__: Given a sorted (increasing order) array with unique
+integer elements, write an algorithm to create a binary search tree with
+minimal height.
+``` ruby
+def minimal_insert(bstree, arr)
+  if arr.length == 1
+    bstree.insert(arr[0])
+  elsif arr.length == 0
+    # do nothing
+  else
+    mid_idx = arr.length/2
+    bstree.insert(arr[mid_idx])
+    # Recurse on left sub-array
+    minimal_insert(bstree, arr.take(mid_idx))
+    # Recurse on right sub-array
+    minimal_insert(bstree, arr.drop(mid_idx + 1))
+  end
+end
+```
+
+__List of Depths__: Given a binary tree, design an algorithm which creates a
+linked list of all the nodes at each depth(e.g. if you have a tree with depth D,
+you will have D linked lists)
+``` ruby
+def depth_lists(root)
+  # Begin with inserting root into the first LinkedList
+  linkedlist_arr = []
+  current_list = LinkedList.new
+  current_list.insert(root.value, root) unless root.nil?
+  until current_list.empty?
+    # Push the previous level into the array
+    linkedlist_arr << current_list
+    # The links from previous level are the parent nodes
+    parents = current_list
+    # Re-assign current list to an en empty list
+    current_list = LinkedList.new
+    # Go through each parent and insert their children into current list
+    parents.each do |parent|
+      parentNode = parent.val
+      current_list.insert(parentNode.left.value, parentNode.left) unless parentNode.left.nil?
+      current_list.insert(parentNode.right.value, parentNode.right) unless parentNode.right.nil?
+    end
+    # Go back to top
+  end
+  linkedlist_arr
+end
+```
+
+__Check Balanced__: Implement a function to check if a binary tree is balanced.
+For the purposes of this question, a balanced tree is defined to be a tree
+such that the heights of the two subtrees of any node never differ by more
+than one.

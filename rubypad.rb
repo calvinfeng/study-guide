@@ -35,8 +35,27 @@ def fibonacci_dynamic(n)
   end
   a + b
 end
+# puts Benchmark.measure {fibonacci_dynamic(35)}
+# puts Benchmark.measure {fibonacci(35)}
+# puts Benchmark.measure { p fibs_dynamic(35) }
+# puts Benchmark.measure { p fibs(35)}
+def minimal_insert(bstree, arr)
+  if arr.length == 1
+    #bstree.insert(arr[0])
+    bstree << arr[0].to_s
+  elsif arr.length == 0
+    # do nothing
+  else
+    mid_idx = arr.length/2
+    #bstree.insert(arr[mid_idx])
+    bstree << arr[mid_idx].to_s
+    # Recurse on left sub-array
+    minimal_insert(bstree, arr.take(mid_idx))
+    # Recurse on right sub-array
+    minimal_insert(bstree, arr.drop(mid_idx + 1))
+  end
+end
 
-puts Benchmark.measure {fibonacci_dynamic(35)}
-puts Benchmark.measure {fibonacci(35)}
-puts Benchmark.measure { p fibs_dynamic(35) }
-puts Benchmark.measure { p fibs(35)}
+str = ""
+minimal_insert(str, [1,2,3,4,5,6,7])
+p str

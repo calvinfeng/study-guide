@@ -1,4 +1,9 @@
 # Linked List
+LinkedList is ideal for fast insertion/deletion. It may not offer an efficient
+lookup like indexing into an array but if items are constantly removed/added, then
+it's better to use LinkedList instead of an array. Inserting into middle of an array
+takes O(n) time, because all trailing elements need to copy over to next spot.
+LinkedList also maintains order.
 
 ## Implementation
 ``` ruby
