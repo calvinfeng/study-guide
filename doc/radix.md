@@ -52,7 +52,7 @@ It takes O(n) to iterate through the array once and count their frequency
 of appearance with a counter array/hash.
 It takes O(R + n) to go through the second loop. It has check O(R) times
 for the if-statement and (in this case) within those 256 if-statements, it
-has to push the elements *n* times into the final array. 
+has to push the elements *n* times into the final array.
 ``` ruby
 def key_indexed_count(arr)
   # ASCII character has a radix of 256
@@ -125,3 +125,62 @@ end
 
 ## Interview Problems
 What is the most efficient way to sort 1 million 32 bit integers?
+
+__Non Comparison Sort__:
+
+Part 1: Say that I gave you an array of length n, containing the numbers 1..n in jumbled order. "Sort" this array in O(n) time. You should be able to do this without looking at the input.
+
+Part 2: Say that I give you an array of length n with numbers in the range 1..N (N >= n). Sort this array in O(n + N) time. You may use O(N) memory.
+
+Part 3: Say I give you an array of n strings, each of length k. I claim that, using merge sort, you can sort this in O(knlog(n)), since comparing a pair of strings takes O(k) time.
+
+In theory, I can sort this with O(k*n) time using non comparison radix sort.
+``` ruby
+def sort1(jumbled_arr)
+  (1..(jumbled_arr.length)).to_a
+end
+
+def sort2(array, max_val)
+  counter = Array.new(max_val + 1, 0)
+  result = []
+  array.each do |el|
+    counter[el] += 1
+  end
+  counter.each_index do |idx|
+    counter[idx].times { result << idx }
+  end
+  result
+end
+
+def sort3(str_arr)
+  (str_arr.first.length - 1).downto(0) do |d|
+    str_arr = merge_sort(str_arr, d)
+  end
+  str_arr
+end
+
+def merge_sort(arr, idx)
+  return arr if arr.empty? || arr.length == 1
+  mid_idx = arr.length/2
+  left_arr = merge_sort(arr.take(mid_idx), idx)
+  right_arr = merge_sort(arr.drop(mid_idx), idx)
+  merge(left_arr, right_arr, idx)
+end
+
+def merge(left, right, i)
+  sorted_result = []
+  until left.empty? || right.empty?
+    if left[0][i].ord <= right[0][i].ord
+      sorted_result << left.shift
+    else
+      sorted_result << right.shift
+    end
+  end
+  if left.empty?
+    sorted_result += right
+  else
+    sorted_result += left
+  end
+  sorted_result
+end
+```

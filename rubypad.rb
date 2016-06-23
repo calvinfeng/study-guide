@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'byebug'
 
 def fibs(n)
   return [] if n <= 0
@@ -56,6 +57,41 @@ def minimal_insert(bstree, arr)
   end
 end
 
-str = ""
-minimal_insert(str, [1,2,3,4,5,6,7])
-p str
+# str = ""
+# minimal_insert(str, [1,2,3,4,5,6,7])
+
+# O(k nlog(n)) time, with each string has length k
+def string_sort(str_arr)
+  (str_arr.first.length - 1).downto(0) do |d|
+    str_arr = merge_sort(str_arr, d)
+  end
+  str_arr
+end
+
+def merge_sort(arr, idx)
+  return arr if arr.empty? || arr.length == 1
+  mid_idx = arr.length/2
+  left_arr = merge_sort(arr.take(mid_idx), idx)
+  right_arr = merge_sort(arr.drop(mid_idx), idx)
+  merge(left_arr, right_arr, idx)
+end
+
+def merge(left, right, i)
+  sorted_result = []
+  until left.empty? || right.empty?
+    if left[0][i].ord <= right[0][i].ord
+      sorted_result << left.shift
+    else
+      sorted_result << right.shift
+    end
+  end
+  if left.empty?
+    sorted_result += right
+  else
+    sorted_result += left
+  end
+  sorted_result
+end
+
+str_arr = ["hij","xyz","opq","abc", "cde"]
+p string_sort(str_arr)
