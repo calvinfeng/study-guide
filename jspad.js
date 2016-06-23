@@ -1,5 +1,5 @@
 var cache = {};
-function dynamic_fib(n) {
+function dynamicFib(n) {
   if (n <= 0) {
     return [];
   } else if (n === 1) {
@@ -11,8 +11,8 @@ function dynamic_fib(n) {
   if (cache[n]) {
     return cache[n];
   } else {
-    cache[n] = dynamic_fib(n - 1).concat(dynamic_fib(n - 1)[dynamic_fib(n - 1).length - 1] +
-      dynamic_fib(n - 2)[dynamic_fib(n - 2).length - 1]);
+    cache[n] = dynamicFib(n - 1).concat(dynamicFib(n - 1)[dynamicFib(n - 1).length - 1] +
+      dynamicFib(n - 2)[dynamicFib(n - 2).length - 1]);
     return cache[n];
   }
 }
@@ -28,8 +28,3 @@ function fib(n) {
   return fib(n - 1).concat(fib(n - 1)[fib(n - 1).length - 1] +
     fib(n - 2)[fib(n - 2).length - 1]);
 }
-
-
-dynamic_fib(20);
-console.log(cache);
-console.log(fib(20));

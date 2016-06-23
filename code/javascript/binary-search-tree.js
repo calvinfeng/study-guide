@@ -166,9 +166,9 @@ BSTree.delete = function(node, value) {
   }
 };
 
-
-var tree = new BSTree();
-while (tree.nodeCount < 10) {
-  tree.insert(Math.floor(Math.random()*10));
-}
-console.log(tree.height());
+// var tree = new BSTree();
+// while (tree.nodeCount < 10) {
+//   tree.insert(Math.floor(Math.random()*10));
+// }
+// console.log(tree.height());
+module.exports = BSTree;

@@ -290,6 +290,31 @@ def is_balanced?(root_node)
 end
 ```
 
+__Validate BST__: Implement a function to check if a binary tree is binary
+search tree
 
-
+If the tree does not have duplicate value, do an in-order traversal and
+see if the elements are sorted, if not, it's not a valid BST. But let's say
+we need a solution that allows duplicates. Then this is the approach:
+``` javascript
+/*
+  This approach is using the fact that the maximum of left subtree must be
+less than or equal to the root node and the minimum of right subtree must be
+greater than the root node.
+*/
+function validateBST(root) {
+  if (root.left && root.right) {
+    return (BSTree.max(root.left).value <= root.value &&
+      BSTree.max(root.right).value > root.value) &&
+        (validateBST(root.left) && validateBST(root.right));
+  } else if (root.left) {
+    return (BSTree.max(root.left).value <= root.value) &&
+      validateBST(root.left);
+  } else if (root.right) {
+    return (BSTree.max(root.right).value > root.value) &&
+      validateBST(root.right);
+  } else {
+    return true;
+  }
+}
 ```
