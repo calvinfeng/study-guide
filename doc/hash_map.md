@@ -92,6 +92,7 @@ strings with names for either folders or files. Keys that are folders point
 to nested hashes. Keys that are files point to "true". Write a function
 that takes such a hash and returns an array of strings with the path to
 each file in the hash.
+
 __Example__:
 ```
 files = {
