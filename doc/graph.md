@@ -67,7 +67,7 @@ have an array of adjacency lists; each vertex gets a list (of neighbors.) We can
 Example:
 
 ![graph][graph]
-[graph]:./img/graph.png
+[graph]:../img/graph.png
 
 ```
 i

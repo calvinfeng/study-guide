@@ -75,7 +75,7 @@ Notes
 * __gray__: locked_in nodes
 
 ![example][dijkstra]
-[dijkstra]: ./img/dijkstra.png
+[dijkstra]: ../img/dijkstra.png
 Here are the steps
 1. `frontiers` => {A: 0}
 2. `frontiers` => {B: 2, C: 5}, `locked` => {A: 0}

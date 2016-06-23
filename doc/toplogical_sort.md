@@ -67,7 +67,7 @@ Definition: *v* and *w* are strongly connected if there is a directed path
 from *v* to *v* and a directed path
 
 ![strongly_connected][scc]
-[scc]: ./img/strongly_connected.png
+[scc]: ../img/strongly_connected.png
 
 A-B-C are strongly connected components because A can get to B, B can get to A, B can get to C and C can get to B, and etc...
 

@@ -14,7 +14,7 @@ Using a binary search tree as example, the traversals can be described as
 Using binary search tree as an example
 
 ![binary_tree][binary_tree]
-[binary_tree]: ./img/binary_tree.png
+[binary_tree]: ../img/binary_tree.png
 
 ## Pre-order
 ``` ruby

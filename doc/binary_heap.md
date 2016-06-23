@@ -114,4 +114,4 @@ restructure itself to maintain heap invariant.
 
 For example,
 ![heapify_up][heapify_up]
-[heapify_up]: ./img/heapify_up.png
+[heapify_up]: ../img/heapify_up.png
