@@ -67,7 +67,7 @@ implement these data structures in JavaScript at least once for each.
 - [x] [Adjacency Matrix][graph]
 - [x] [Topological Sort (Kahn's Algorithm)][topo]
 - [x] Topological Sort (Tarjan's Algorithm)
-- [x] Dijkstra's Algorithm (Use PriorityQueue without decrease-key)
+- [x] [Dijkstra's Algorithm (Use PriorityQueue without decrease-key)][dijkstra]
 
 ### Dynamic Programming & Recursion
 - [x] [Longest Common Subsequence(Use matrices)][dynamic]
@@ -113,23 +113,23 @@ The tree week
 - [Dynamic Programming][dynamic]
 
 
-[bfs]: ./breadth_first_search.md
-[binary_heap]: ./binary_heap.md
-[binary_search]: ./binary_search.md
-[bst]: ./binary_search_tree.md
-[dfs]: ./depth_first_search.md
-[dijkstra]: ./dijsktra.md
-[dynamic_array]: ./dynamic_array.md
-[dynamic]: ./dynamic_programming.md
-[graph]: ./graph.md
-[hash_map]: ./hash_map.md
-[linked_list]: ./linked_list.md
-[lru]: ./lru.md
-[merge_sort]: ./merge_sort.md
-[quick_sort]: ./quick_sort.md
-[radix]: ./radix.md
-[stack_and_queue]: ./stack_and_queue.md
-[stack_queue]: ./stack_queue.md
-[tree_traversal]: ./tree_traversal.md
-[trie]: ./trie.md
-[topo]: ./topological_sort.md
+[bfs]: ./doc/breadth_first_search.md
+[binary_heap]: ./doc/binary_heap.md
+[binary_search]: ./doc/binary_search.md
+[bst]: ./doc/binary_search_tree.md
+[dfs]: ./doc/depth_first_search.md
+[dijkstra]: ./doc/dijsktra.md
+[dynamic_array]: ./doc/dynamic_array.md
+[dynamic]: ./doc/dynamic_programming.md
+[graph]: ./doc/graph.md
+[hash_map]: ./doc/hash_map.md
+[linked_list]: ./doc/linked_list.md
+[lru]: ./doc/lru.md
+[merge_sort]: ./doc/merge_sort.md
+[quick_sort]: ./doc/quick_sort.md
+[radix]: ./doc/radix.md
+[stack_and_queue]: ./doc/stack_and_queue.md
+[stack_queue]: ./doc/stack_queue.md
+[tree_traversal]: ./doc/tree_traversal.md
+[trie]: ./doc/trie.md
+[topo]: ./doc/topological_sort.md
