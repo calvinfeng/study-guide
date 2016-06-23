@@ -7,6 +7,7 @@ recursive step will terminate. It will return early once target is found.
 ``` ruby
 def dfs(root, target)
   return nil if root.nil?
+  return root if root == target
   root.children.each do |child|
     search_result = dfs(child, target)
     return search_result unless search_result.nil?

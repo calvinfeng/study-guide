@@ -318,3 +318,37 @@ function validateBST(root) {
   }
 }
 ```
+
+__Successor__: Write an algorithm to find the "next" node (i.e. in-order
+successor) of a given node in a binary search tree. You may assume that
+each node has a link to its parent.
+
+This problem is easy if we choose the root of the tree or any node that
+has a right subtree because the next node has to be the left-most node of
+the right subtree. What if a node does not have a right subtree?
+``` ruby
+# If the maximum of the left sub-tree of the root is chosen, then it has no
+# right subtree. It has to traverse upward to find the successor
+def successor(node)
+  if node.right
+    BinarySearchTree.left_most(node.right)
+  else
+    current_node = node
+    parent_node = current_node.parent
+    while !parent_node.nil? && parent_node.right == current_node
+      # Traverse upward until current_node finds itself to be the left child
+      current_node = parent_node
+      parent_node = current_node.parent
+    end  
+    current_node.parent
+  end
+end
+
+def BinarySearchTree.left_most(node)
+  return nil if node.nil?
+  until node.left.nil?
+    node = node.left
+  end
+  node
+end
+```
