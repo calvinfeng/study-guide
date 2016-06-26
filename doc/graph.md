@@ -134,11 +134,11 @@ The relation "is connected to" is an equivalence relation:
 connected to *x*
 
 
- A *connected component* is a maximal set of connected vertices
+A *connected component* is a maximal set of connected vertices
 
- The goal is to partition a set of vertices into connected component, we
- will achieve this in linear time by iterating through all the vertices
- contained in a graph.
+The goal is to partition a set of vertices into connected component, we
+will achieve this in linear time by iterating through all the vertices
+contained in a graph.
 
 ### Approach
 1. Initialize all vertices as unmarked
@@ -186,7 +186,7 @@ end
 ```
 
 ## Interivew Problems
-__Route Between Nodes__: Given a directed graph, design an algorithm to find out
+__Route Between Nodes__(CTCI): Given a directed graph, design an algorithm to find out
 whether there is a route between two nodes
 ``` ruby
 def is_there_route?(source, dest)
@@ -202,5 +202,60 @@ def dfs(node, target)
     return search_result unless search_result.nil?
   end
   nil
+end
+```
+
+__Deep Copy of a Graph__: Given a node, and this node contains other nodes,
+they together form a graph. Write a function to deep copy this node and
+everything inside it.
+```
+Example 1
+A contains B and C. B & C contain nothing
+A.nodes = [B, C]
+B.nodes = []
+C.nodes = []
+
+Example 2
+A contains itself
+A.nodes = [A]
+
+Example 3
+Cyclic Graph
+A.nodes = [B]
+B.nodes = [C]
+C.nodes = [A]
+
+Example 4 => What is the time complexity of your algorithm, given this example?
+D.nodes = [E, F, D, E, E, E, E, F]
+E.nodes = [G, H]
+F.nodes = []
+G.nodes = []
+H.nodes = []
+```
+
+``` ruby
+# N = number of nodes
+# M = sum of the sizes of all node lists
+# Time: O(N + M)
+# Space: O(N) + O(M)
+class Node
+  def initialize
+    @nodes = []
+  end
+
+  def deepCopy(dup_record = Hash.new)
+    new_node = Node.new
+    dup_record[self] = new_node
+    self.nodes.each do |node|
+      # It's already been copied, so use the copied version
+      if dup_record[node]
+        new_node.nodes << dup_record[node]
+      else
+        # It hasn't been copied, so make a copy
+        new_node.nodes << node.deepCopy(dup_record)
+      end
+    end
+    new_node
+  end
 end
 ```
