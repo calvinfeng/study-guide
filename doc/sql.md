@@ -1,9 +1,65 @@
 # Basic SQL Syntax
 
-## Data Manipulation Language (DML)
-
 ## Data Definition Language (DDL)
+Creating table
+``` SQL
+CREATE TABLE person (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  gender CHAR(1),
+  birth_date DATE
+);
+```
+Inserting into table
+``` SQL
+INSERT INTO
+  person (first_name, last_name, gender, birth_date)
 
+VALUES
+  ("Calvin", "Feng", 'M', '1991-12-23'),
+  ("Steven", "Jern", "M", '1985-01-01');
+```
+
+## Data Manipulation Language (DML)
+Query using `SELECT`
+``` SQL
+SELECT *
+FROM person
+WHERE first_name = "Calvin" AND birth_date > '1990-01-01'
+```
+
+`BETWEEN` operator
+``` SQL
+SELECT id, first_name, last_name, start_date
+FROM employee
+WHERE start_date BETWEEN '2005-01-01' AND '2007-01-01';
+```
+Using sub-queries
+``` SQL
+SELECT id, product_cd, customer_id, avail_balance
+FROM account
+WHERE product_cd IN (
+  SELECT product_cd
+  FROM product
+  WHERE product_type_cd = 'ACCOUNT'
+);
+```
+Join tables
+``` SQL
+SELECT a.account_id, c.fed_id, e.first_name, e.last_name
+FROM employee e INNER JOIN account a
+  ON e.emp_id = a.open_emp_id
+  INNER JOIN customer c
+    ON a.cust_id = c.cust_id
+WHERE c.cust_type_cd = 'B';
+```
+Self join
+``` SQL
+SELECT e.first_name, e.last_name, e_manager.first_name, e_manager.last_name
+FROM employee e INNER JOIN employee e_manager
+  ON e.superior_emp_id = e_manager.emp_id
+```
 
 
 
