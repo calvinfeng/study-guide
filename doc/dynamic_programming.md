@@ -1,7 +1,8 @@
 # Dynamic Programming
 Dynamic programming is mostly just a matter of taking a recursive algorithm
 and finding the overlapping subproblems (that is, the repeated calls.) You
-then cache those results for future recursive calls.
+then cache those results for future recursive calls. Therefore, dynamic
+programming goes hand in hand with recursions.
 
 Some people call top-down dynamic programming "memorization" and only use
 "dynamic programming" to refer to bottom-up work.
@@ -197,4 +198,69 @@ Then let's try to fill in the matrix
 | g | 0 "" | 1 "a" | 1 "a" | 2 "ac"                   | 2 "ac" |
 | f | 0 "" | 1 "a" | 1 "a" | 2 "ac"                   | 2 "ac" |
 
-Now we can confirm that LCS is "ac" and length is 2 
+Now we can confirm that LCS is "ac" and length is 2
+
+## Interview Problems
+
+__Triple Step__: A child is running up a staircase with n steps and can
+hop either 1 step, 2 steps, or 3 steps, at a time. Implement a method
+to count how many possible ways the child can run up the stairs.
+``` ruby
+# Think about inductive steps,
+# f(n - 1) means it has a 1-step left to reach n
+# f(n - 2) means it has a 2-step left to reach n
+# f(n - 3) means it has a 3-step left to reach n
+def triple_step_dynamic(n, memo = Hash.new)
+  return [[]] if n == 0
+  return [[1]] if n == 1
+  return [[1,1],[2]] if n == 2
+  result = []
+  memo[n - 1] = triple_step_dynamic(n - 1, memo) unless memo[n - 1]
+  result += memo[n - 1].map do |combo|
+    combo + [1]
+  end
+  memo[n - 2] = triple_step_dynamic(n - 2, memo) unless memo[n - 2]
+  result += memo[n - 2].map do |combo|
+    combo + [2]
+  end
+  memo[n - 3] = triple_step_dynamic(n - 3, memo) unless memo[n - 3]
+  result += memo[n - 3].map do |combo|
+    combo + [3]
+  end
+  result
+end
+
+def triple_step(n)
+  return [[]] if n <= 0
+  return [[1]] if n == 1
+  return [[1,1], [2]] if n == 2
+  result = []
+  result += triple_step(n - 1).map do |combo|
+    combo + [1]
+  end
+  result += triple_step(n - 2).map do |combo|
+    combo + [2]
+  end
+  result += triple_step(n - 3).map do |combo|
+    combo + [3]
+  end
+  result
+end
+```
+
+__Magic Index__: A magic index in an array A[0...n] is defined to be an
+index such that A[i] = i. Given a sorted array of distinct integers, write a
+method to find a magic index, if one exists, in array A.
+``` ruby
+def find_magic_index(arr, start_idx, end_idx)
+  return nil if end_idx < start_idx
+  mid = (start_idx + end_idx)/2
+  if arr[mid] == mid
+    mid
+  elsif arr[mid] > mid
+    find_magic_index(arr, start, mid - 1)
+  else
+    find_magic_index(arr, mid + 1, end_idx)
+  end
+end
+```

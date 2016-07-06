@@ -93,5 +93,57 @@ def merge(left, right, i)
   sorted_result
 end
 
-str_arr = ["hij","xyz","opq","abc", "cde"]
-p string_sort(str_arr)
+def triple_step_dynamic(n, memo = Hash.new)
+  return [[]] if n == 0
+  return [[1]] if n == 1
+  return [[1,1],[2]] if n == 2
+
+  result = []
+  memo[n - 1] = triple_step_dynamic(n - 1, memo) unless memo[n - 1]
+  result += memo[n - 1].map do |combo|
+    combo + [1]
+  end
+
+  memo[n - 2] = triple_step_dynamic(n - 2, memo) unless memo[n - 2]
+  result += memo[n - 2].map do |combo|
+    combo + [2]
+  end
+
+  memo[n - 3] = triple_step_dynamic(n - 3, memo) unless memo[n - 3]
+  result += memo[n - 3].map do |combo|
+    combo + [3]
+  end
+  result
+end
+
+def triple_step(n)
+  return [[]] if n <= 0
+  return [[1]] if n == 1
+  return [[1,1], [2]] if n == 2
+  result = []
+  result += triple_step(n - 1).map do |combo|
+    combo + [1]
+  end
+  result += triple_step(n - 2).map do |combo|
+    combo + [2]
+  end
+  result += triple_step(n - 3).map do |combo|
+    combo + [3]
+  end
+  result
+end
+
+# puts Benchmark.measure {triple_step(25)}
+# puts Benchmark.measure {triple_step_dynamic(25)}
+
+def find_magic_index(arr, start_idx, end_idx)
+  return nil if end_idx < start_idx
+  mid = (start_idx + end_idx)/2
+  if arr[mid] == mid
+    mid
+  elsif arr[mid] > mid
+    find_magic_index(arr, start, mid - 1)
+  else
+    find_magic_index(arr, mid + 1, end_idx)
+  end
+end
