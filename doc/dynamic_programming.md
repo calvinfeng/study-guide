@@ -264,3 +264,14 @@ def find_magic_index(arr, start_idx, end_idx)
   end
 end
 ```
+
+__Make Change__:
+
+``` ruby
+def make_change(total, m, coins)
+  return 0 if total < 0 || m < 0
+  return 1 if total == 0
+  return make_change(total, m - 1, coins) + make_change(total - coins[m], m, coins)
+end
+make_change(10, 3, [1,5,10,25])
+```

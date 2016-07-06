@@ -147,3 +147,11 @@ def find_magic_index(arr, start_idx, end_idx)
     find_magic_index(arr, mid + 1, end_idx)
   end
 end
+
+def make_change(total, m, coins)
+  return 0 if total < 0 || m < 0
+  return 1 if total == 0
+  return make_change(total, m - 1, coins) + make_change(total - coins[m], m, coins)
+end
+
+p make_change(100, 3, [1,5,10,25])
