@@ -155,3 +155,21 @@ def make_change(total, m, coins)
 end
 
 p make_change(100, 3, [1,5,10,25])
+
+def isBalanced?(string)
+  match = {'(' => ')', '{' => '}', '[' => ']'}
+  return false if string.length % 2 == 1
+  stack = []
+  string.chars.each do |char|
+    if stack.empty?
+      stack << char
+    else
+      if match[stack.last] == char
+        stack.pop
+      else
+        stack << char
+      end
+    end
+  end
+  stack.empty? ? true : false
+end

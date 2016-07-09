@@ -63,7 +63,7 @@ class MinStack
 end
 ```
 
-__Stack of Plates__ - Imagine a stack of plates. If the stack gets too high,
+__Stack of Plates__: Imagine a stack of plates. If the stack gets too high,
 it might topple. Therefore, in real life, we would likely start a new stack
 when the previous stack exceeds some threshold. Implement a data structure
 `SetOfStacks` that mimics this. `SetOfStacks` should be composed of several
@@ -104,7 +104,7 @@ class SetOfStacks
 end
 ```
 
-__Queue via Stack__ - Implement a `MyQueue` class which implements a queue
+__Queue via Stack__: Implement a `MyQueue` class which implements a queue
 using two stacks.
 ``` ruby
 # This is basically a stack queue
@@ -123,5 +123,29 @@ class MyQueue
     end
     @out.pop
   end
+end
+```
+
+__Balance Braces__: Write a function that check whether a string has
+balancing parenthesis, brackets, and curly braces. For example, [](){}, [(){}],
+[{()}] are balanced. [(]), )()], {}[)](), are not balanced.
+
+``` ruby
+def isBalanced?(string)
+  match = {'(' => ')', '{' => '}', '[' => ']'}
+  return false if string.length % 2 == 1
+  stack = []
+  string.chars.each do |char|
+    if stack.empty?
+      stack << char
+    else
+      if match[stack.last] == char
+        stack.pop
+      else
+        stack << char
+      end
+    end
+  end
+  stack.empty? ? true : false
 end
 ```
