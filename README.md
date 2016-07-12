@@ -3,17 +3,8 @@ By now it should be week 14 for those who are reading this guide. This study
 guide outlines the major data structures and algorithms needed to succeed in
 technical interviews. The official guide was first written by Haseeb Qureshi,
 titled [How To Break Into The Tech Industry - a Guide to Job Hunting and Interviews][haseeb]
-on his personal blog site. This guide focuses on time management and examples of
-implementation details of the materials. However, please read Haseeb's guide at least
-once and follow his advice. I simply took his suggestions and added more details to
-them, just so I can get the practice from writing them.
+on his personal blog site. This guide focuses on implementation details of the materials. However, please read Haseeb's guide at least once and follow his advice.
 [haseeb]: http://haseebq.com/#general-study
-
-This study guide is more tailored toward companies who ask abstract algorithmic
-problems. Small startups tend to ask you to build a small project or try to debug
-their production code. For those cases, I think AppAcademy has prepared you well.
-If you are still not confident, go out and build more JavaScript games or another
-Rails project.
 
 ## Key Resources
 * Cracking the Coding Interview 6th Edition
@@ -43,10 +34,7 @@ Rails project.
   - [x] Optional: AVL, 2-3 Tree, Red-Black Tree
 - [x] [Directed & Undirected Graphs][graph]
 - [x] [Tries][trie]
-- [ ] Suffix Tree
-
-AppAcademy had you implemented them in Ruby. For those who are interested in front-end role,
-implement these data structures in JavaScript at least once for each.
+- [ ] Suffix Tree (work in progress)
 
 ## Algorithms
 
@@ -72,14 +60,19 @@ implement these data structures in JavaScript at least once for each.
 ### Dynamic Programming & Recursion
 - [x] [Longest Common Subsequence(Use matrices)][dynamic]
 - [x] [Fibonacci Sequence][dynamic]
-- [ ] Knapsack Problem
+- [ ] Knapsack Problem (work in progress)
 
 ## Timeline
+Coursera might have taken down the algorithm lectures. Use this link
+https://www.youtube.com/user/Rabynovych/playlists
 
 ### Week 1
-The first week of independent study, which is week 14 in a/A's calendar
-Start watching Algorithm Part 1 on Coursera for Stacks & Queues, Elementary Sorts,
-Merge Sort, and Quick Sort. Go 2x speed.
+Coursera - Algorithms Part 1
+  * Stacks & Queues
+  * Elementary Sorts
+  * Merge Sort
+  * Quick Sort
+  * Hash Functions & Linear Probing
 
 #### Topics
 - [Dynamic Array or ArrayList(Java)][dynamic_array]
@@ -93,7 +86,13 @@ Merge Sort, and Quick Sort. Go 2x speed.
 - [Merge Sort][merge_sort]
 
 ### Week 2
-The tree week
+Coursera - Algorithms Part 1
+  * Binary Heaps
+  * Heap Sort
+  * Binary Search Tree
+  * 2-3 Search Tree
+  * Red-Black Tree
+
 #### Topics
 - [Binary Heap][binary_heap]
 - Heap Sort
@@ -105,13 +104,20 @@ The tree week
 - [Topological Sort][topo]
 
 ### Week 3
+Coursera - Algorithms Part 2
+  * Graphs (undirected)
+  * Connected Components
+  * Digraphs (directed)
+  * Radix Sort
+  * R-way Tries
+
 #### Topics
 - [Dijkstra's Algorithm][dijkstra]
-- [Suffix Tree]
+- [Suffix Tree][suffix]
 - [Trie or Prefix Tree][trie]
 - [Radix][radix]
 - [Dynamic Programming][dynamic]
-
+- [Scalability][scale]
 
 [bfs]: ./doc/breadth_first_search.md
 [binary_heap]: ./doc/binary_heap.md
@@ -133,3 +139,6 @@ The tree week
 [tree_traversal]: ./doc/tree_traversal.md
 [trie]: ./doc/trie.md
 [topo]: ./doc/topological_sort.md
+[manacher]: ./doc/manacher.md
+[scale]: ./doc/scalability.md
+[suffix]: ./doc/suffix_tree.md
