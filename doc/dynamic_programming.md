@@ -200,6 +200,34 @@ Then let's try to fill in the matrix
 
 Now we can confirm that LCS is "ac" and length is 2
 
+## Longest Common Substring
+This is very similar to the Longest Common Subsequence problem. We will
+use a matrix and fill it up with values. By the end, the maximum value of the
+matrix will be the length of the longest common substring
+``` ruby
+# Naive Approach O(n^3)
+def common_substrings(str1, str2)
+  longest_substr = ""
+  substr1 = Hash.new
+  (0...str1.length).each do |i|
+    (i..str1.length).each do |j|
+      # taking substring out costs O(n) time
+      substr1[str1[i..j]] = true
+    end
+  end
+
+  (0...str2.length).each do |i|
+    (i..str2.length).each do |j|
+      if substr1[str2[i..j]] && (j - i) > longest_substr.length
+        longest_substr = str2[i..j]
+      end
+    end
+  end
+
+  longest_substr
+end
+```
+
 ## Interview Problems
 
 __Triple Step__: A child is running up a staircase with n steps and can
