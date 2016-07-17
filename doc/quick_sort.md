@@ -1,6 +1,7 @@
 # Quick Sort
 
 ## Implementation
+#### Ruby
 ``` ruby
 # Not in place, use O(n) memory
 class QuickSort
@@ -57,8 +58,39 @@ is `array[pivot_idx + 1]`. Then the pivot will take over the spot at `array[pivo
 
 At last, put the value in pivot's origin position which is `array[pivot_idx]`.
 
+#### JavaScript
+We can throw a callback in for the JavaScript version to achieve the same
+generality as above. But this version doesn't need to return any value because
+we are modifying the array in place.
+``` javascript
+function inPlaceQuickSort(array, startIndex, arrayLength) {
+  if (arrayLength >= 2) {
+    let pivotIndex = partition(array, startIndex, arrayLength);
+    let leftLength = pivotIndex - startIndex;
+    let rightLength = arrayLength - leftLength - 1;
+    inPlaceQuickSort(array, startIndex, leftLength);
+    inPlaceQuickSort(array, pivotIndex + 1, rightLength);
+  }
+}
+
+function partition(array, startIndex, subArrayLength) {
+  let pivotIndex = startIndex;
+  let pivot = array[startIndex];
+  for (let i = startIndex + 1; i < startIndex + subArrayLength; i++) {
+    let val = array[i];
+    if (val < pivot) {
+      array[i] = array[pivotIndex + 1];
+      array[pivotIndex + 1] = pivot;
+      array[pivotIndex] = val;
+      pivotIndex += 1;
+    }
+  }
+  return pivotIndex;
+}
+```
+
 ### Tail Recursion
-Answer from Quora: 
+Answer from Quora:
 Tail recursion is a special kind of recursion where the recursive call is the very last thing in the function. It's a function that does not do anything at all after recursing.
 
 This is important because it means that you can just pass the result of the recursive call through directly instead of waiting for it—you don't have to consume any stack space. A normal function, on the other hand, has to have a stack frame so that the compiler knows to come back to it (and have all the necessary variable values) after the recursive call is finished.

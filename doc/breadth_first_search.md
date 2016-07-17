@@ -22,6 +22,7 @@ end
 ## Implementation (Graph)
 The graph implementation requires marking the node as visited to prevent
 infinite recursion
+#### Ruby
 ``` ruby
 class Vertex
   attr_accessor :value, :in_edges, :out_edges
@@ -70,4 +71,75 @@ def bfs(node, target)
   end
   nil
 end
+```
+
+#### JavaScript
+``` javascript
+//Graphs
+class Vertex {
+  constructor(value) {
+    this.value = value;
+    this.inEdges = [];
+    this.outEdges = [];
+    this.visited = false;
+  }
+
+  visit() {
+    this.visited = true;
+  }
+
+  deleteOutEdge(outEdge) {
+    for (let i = 0; i < this.outEdges.length; i++) {
+      if (this.outEdges[i] === outEdge) {
+        this.outEdges.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  deleteInEdge(inEdge) {
+    for (let i = 0; i < this.inEdges.length; i++) {
+      if (this.inEdges[i] === inEdge) {
+        this.inEdges.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
+class Edge {
+  constructor(fromVertex, toVertex, cost) {
+    this.fromVertex = fromVertex;
+    this.toVertex = toVertex;
+    this.cost = cost || 1;
+    fromVertex.outEdges.push(this);
+    toVertex.inEdges.push(this);
+  }
+
+  destroy() {
+    this.toVertex.deleteInEdge(this);
+    this.fromVertex.deleteOutEdge(this);
+    this.toVertex = undefined;
+    this.fromVertex = undefined;
+  }
+}
+
+function breadthFirstSearch(vertex, target) {
+  let queue = [vertex];
+  while (queue.length > 0) {
+    let probeVertex = queue.shift();
+    probeVertex.visit();
+    if (probeVertex.value === target) {
+      return probeVertex;
+    } else {
+      probeVertex.outEdges.forEach((outEdge) => {
+        let neighborVertex = outEdge.toVertex;
+        if (!neighborVertex.visit()) {
+          queue.push(neighborVertex);
+        }
+      });
+    }
+  }
+  return null;
+}
 ```

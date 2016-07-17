@@ -26,9 +26,9 @@ class Edge
   end
 
   def destroy!
-    self.to_vertex.out_edges.delete(self)
+    self.to_vertex.in_edges.delete(self)
     self.to_vertex = nil
-    self.from_vertex.in_edges.delete(self)
+    self.from_vertex.out_edges.delete(self)
     self.from_vertex = nil
   end
 end

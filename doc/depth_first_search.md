@@ -19,6 +19,7 @@ end
 ## Implementation (Graph)
 This is the graph version, which is just a slight modification of the tree
 version
+#### Ruby
 ``` ruby
 class Vertex
   attr_accessor :value, :in_edges, :out_edges
@@ -67,4 +68,71 @@ def dfs(node, target)
 
   nil
 end
+```
+
+#### JavaScript
+``` javascript
+//Graphs using ES6 Syntax
+class Vertex {
+  constructor(value) {
+    this.value = value;
+    this.inEdges = [];
+    this.outEdges = [];
+    this.visited = false;
+  }
+
+  visit() {
+    this.visited = true;
+  }
+
+  deleteOutEdge(outEdge) {
+    for (let i = 0; i < this.outEdges.length; i++) {
+      if (this.outEdges[i] === outEdge) {
+        this.outEdges.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  deleteInEdge(inEdge) {
+    for (let i = 0; i < this.inEdges.length; i++) {
+      if (this.inEdges[i] === inEdge) {
+        this.inEdges.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
+class Edge {
+  constructor(fromVertex, toVertex, cost) {
+    this.fromVertex = fromVertex;
+    this.toVertex = toVertex;
+    this.cost = cost || 1;
+    fromVertex.outEdges.push(this);
+    toVertex.inEdges.push(this);
+  }
+
+  destroy() {
+    this.toVertex.deleteInEdge(this);
+    this.fromVertex.deleteOutEdge(this);
+    this.toVertex = undefined;
+    this.fromVertex = undefined;
+  }
+}
+
+function depthFirstSearch(vertex, target) {
+  if (vertex.value === target) {
+    return vertex;
+  } else {
+    for (let i = 0; i < vertex.outEdges.length; i++) {
+      let neighborVertex = vertex.outEdges[i].toVertex;
+      let searchResult = depthFirstSearch(neighborVertex, target);
+      if (searchResult) {
+        return searchResult;
+      }
+    }
+  }
+  return null;
+}
 ```
