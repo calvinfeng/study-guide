@@ -5,6 +5,7 @@ The naive approach toward string matching is that, given a string with
 length n, and a pattern or substring with length m:
 
 Using an example, string = "ababc" and pattern = "abc"
+
 1. Iterate through `ababc` and `abc` simultaneously, using index i for string
 and index j for pattern
 2. Check `a`: string[0] == pattern[0],
@@ -32,6 +33,9 @@ Now we construct a table, and we call this the transition table (it means how st
 | State 1: `a`     | State 1 | State 2 | State 0 |
 | State 2: `ab`    | State 1 | State 0 | State 3 |
 | State 3: `abc`   | Completion
+
+![finite_state_automata]
+[finite_state_automata]: ../img/finite_state_automata.png
 
 #### Interpretation
 At a given state, input is the character that you get from scanning through
