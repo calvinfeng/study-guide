@@ -1,6 +1,7 @@
 # Binary Search
 
 ## Implementation
+#### Ruby
 ``` ruby
 def binary_search(sorted_arr, target)
   return nil if sorted_arr.empty?
@@ -26,6 +27,30 @@ def binary_search(sorted_arr, target)
 end
 ```
 
+#### JavaScript
+``` javascript
+function binarySearch(sortedArray, target) {
+  if (sortedArray.length === 0) {
+    return null;
+  } else {
+    let probeIndex = Math.floor(sortedArray.length/2);
+    if (target < sortedArray[probeIndex]) {
+      let left = sortedArray.slice(0, probeIndex);
+      return binarySearch(left, target);
+    } else if (target > sortedArray[probeIndex]) {
+      let right = sortedArray.slice(probeIndex + 1);
+      let subAnswer = binarySearch(right, target);
+      if (subAnswer) {
+        return probeIndex + subAnswer + 1;
+      } else {
+        return null;
+      }
+    } else {
+      return probeIndex;
+    }
+  }
+}
+```
 ## Interview Problems
 `three_sum` - Write a function to determine whether any 3 elements in an
 array sum to zero or any target. Brute force will take O(n^3) time, a better
