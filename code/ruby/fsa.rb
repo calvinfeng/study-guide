@@ -20,12 +20,20 @@ def transition_table(pattern, radix)
       end
     end
   end
+
   table
 end
 
-def is_match(string, pattern)
-
-
+def is_match(string, pattern, radix)
+  table = transition_table(pattern, radix)
+  num_of_states = table.keys.length - 1
+  curr_state = "state:0"
+  string.chars.each do |char|
+    curr_state = table[curr_state][char]
+    return true if curr_state == "state:#{num_of_states}"
+  end
+  false
 end
 
-puts transition_table("aacb", ['a','b','c']);
+puts transition_table("acgt", ['a','c','g', 't']);
+puts is_match("acgacgacgaccgtgctgactacggtttacg", "acgt", ['a', 'c', 'g', 't'])

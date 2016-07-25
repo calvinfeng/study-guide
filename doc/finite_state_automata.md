@@ -62,5 +62,77 @@ Iteration #5
 input = 'c'
 state = 2 -> 3
 
-Once state 3 is reached, it means substring is found 
+Once state 3 is reached, it means substring is found
 ```
+## Implementation
+``` ruby
+def transition_table(pattern, radix)
+  table = Hash.new
+  (0..pattern.length).each do |i|
+    table["state:#{i}"] = {pattern: pattern[0...i]}
+  end
+
+  (0...pattern.length).each do |i|
+    radix.each do |char|
+      str = table["state:#{i}"][:pattern] + char
+      discard_num = 0
+      (i+1).downto(0) do |j|
+        if table["state:#{j}"][:pattern] == str.chars.drop(discard_num).join
+          table["state:#{i}"][char] = "state:#{j}"
+          next
+        end
+        discard_num += 1
+      end
+    end
+  end
+
+  table
+end
+
+def is_match(string, pattern, radix)
+  table = transition_table(pattern, radix)
+  num_of_states = table.keys.length - 1
+  current_state = "state:0"
+  string.chars.each do |char|
+    current_state = table[current_state][char]
+    return true if current_state == "state:#{num_of_states}"
+  end
+  false
+end
+```
+
+## Challenge
+The challenge is in creating the transition table. Here's a basic rule of
+thumb. We begin with State 0 with an empty string `""`. For the example above,
+we have three radixes, they are `a`, `b`, and `c`.
+
+Start at state 0, we append these radixes to the string of current state then we ask
+```
+is "a" a match for the string of state 1?
+is "b" a match for the string of state 1?
+is "c" a match for ...
+...
+```
+Since `a` is a match for the string of state 1, so we will say that, at
+state 0, given "a" as an input, we will transition to state 1. Since other
+inputs are not a match for state 1, they will transition back to state 0.
+
+At state 1, our string is `a`, we ask the same question again,
+```
+is "aa" a match for the string of state 2? No
+-> we drop the "a" in the front,
+is "a" a match for the string of state 1? Yes
+-> "aa" -> state 1
+
+is "ab" a match for the string of state 2? Yes
+-> "ab" -> state 2
+
+is "ac" a match for the string of state 2? No
+-> we drop the "a" in the front,
+is "c" a match for the string of state 1? No
+-> we drop the "c" in the front,
+is "" a match for the string of state 0? Yes
+-> "ac" -> state 0
+```
+
+At state 2, our string is now `ab`, we do the same thing as above.
