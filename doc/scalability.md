@@ -40,7 +40,38 @@ But what if you want to go bigger?
 * Vertical: increase the resources of a specific node.
 * Horizontal: increase the number of nodes
 
+
+## Load Balancer
+The role of a load balancer is to distribute and direct requests evenly
+to all the servers.
+__Consistent Hashing__ is needed for balancing loads
+when servers are constantly added and removed.
+
+* What if this goes down?
+    * More load balancers! Failover!
+* Round Robin DNS
+* Smart load balancing is ideal, but dumb is good enough
+* Put one into the database layer as well
+
+
 ## Application Servers
+
+Before we consider scaling the backend, the basic questions to ask are the following:
+### Client vs server
+* How should they talk? Use HTTP (via TCP), or use UDP?
+* What info should live on the client rather than the server?
+* What needs to be persisted, and what's okay to lose?
+* Scalability tradeoffs here
+* What if client and server become inconsistent?
+
+### Scaling the Application
+* Create many, many application servers running on many machines
+* Usually spun up on AWS or using bare metal (for Google/Netflix, etc.)
+  * Much cheaper than Heroku or managing your own
+  * Heroku is PaaS, AWS just provides you an out-of-the-box server
+* Checks the caching layer for most requests
+* Occasionally does the work to invalidate the cache
+
 ### Sessions/States
 Sessions are state
   * Local sessions = bad
@@ -72,6 +103,12 @@ The bottom line is, scaling web application server can be done with the idea
 of stateless and build many servers to handle requests. But, of course, don't forget
 to use load balancer to direct requests. However, the rests are trickier
 
+### Asynchronous jobs
+* Does it need to be done *right this second*?
+* If not, just queue it up in a background process and tell your user you'll get it done!
+* Many, many things can be done asynchronously.
+* Common message queues: RabbitMQ, Resque, Sidekiq
+
 ### Queue
 __Synchronous systems__
   1. Request sent to web server
@@ -93,22 +130,16 @@ Following is the flow for __asynchronous systems__:
 ![asyn]
 [asyn]: ../img/asyn_system.png
 
-## Load Balancer
-The role of a load balancer is to distribute and direct requests evenly
-to all the servers.
-__Consistent Hashing__ is needed for balancing loads
-when servers are constantly added and removed.
-
-## Caching
-Caching avoids the need to scale or at least make it cheaper.
-
-The challenge of cache is when we try to write to the cache
+## Caching Layer
+Caching avoids the need to scale or at least make it cheaper.The challenge of cache is when we try to write to the cache
 
 Here are some complicated caching
+
 * Write-through cache
   * Pro - It directs write I/O onto cache and update data in the database level. It keeps cache and backend data consistent
   * Con - even though it is slow to write to the database level, latency isn't the issue because write to and read from the cache are fast. The real problem is bandwidth. It puts a limit on how many items you can write to the persistent storage layer.
   * Write-through cache is good for applications that write and then re-read data frequently as data is stored in cache and results in low read latency but it isn't ideal for write heavy applications.
+
 
 * Write-back cache
   * Pro - I/O is directed to cache and completion is immediately confirmed to the server. Modification in the cache are not copied to the database until absolutely necessary. This results in low latency and high throughput for write-intensive applications.
@@ -116,10 +147,23 @@ Here are some complicated caching
 
 * Sideline cache
 
+Here are some options for caching
+* Redis, Memcached
+  * Completely in-memory, extremely fast
+  * Key-value stores
+  * Common queries or static data
+  * Cache invalidation (using LRU)
+
 ## CDNs
+CDNs are giant data centers that are designed to send large files to requested destination. CDNs are optimized to deliver large size content
+
 * Way faster than serving content straight from your server.
 * Any JS and media files should live on the CDN and be served from there.
+  * Bootstrap is heavy
+  * JQuery is also another heavy weighted library.
+  * Always use CDN to deliver these heavy libraries
 * All JS and CSS concatenated together.
+  * This is what webpack has done for us
 * Your server should return *only* HTML markup.
 
 ## Databases
@@ -153,12 +197,36 @@ For example, this is the Google File System
 Items are separated into different buckets. However, they are connected by their
 keys (foreign and primary.) JOIN is the answer to how to retrieve data in relational database. Items are linked to one another by their relationships.
 
+#### How to scale a relational database
+* If you have high read load, then master-slave replication.
+* If you have a high write load, then shard.
+* Can span many data centers!
+* If you have high write load across shards, you're fucked. Stop using a relational DB.
+
+Since you are fucked, now comes the solution
+### Database Sharding (Partitioning)
+Sharding means splitting the data across multiple machines while ensuring
+you have a way of figuring out which data is on which machine.
+
+* Vertical Partition: This is partition by features
+* Key-based or Hash-based Partition: This allocates data by hashing them and put
+them on different machines but adding additional servers means re-allocating
+all the data - very expensive task. Use __consistent hashing__ !
+* Directory-based Partition: Maintain a lookup table for where the data can
+be found.
+
 ### Relational databases are bad at scaling
 * Joins are inefficient when databases become humongous, and that's probably
 why MongDB called themselves hu-__mongo__ -ous. MongDB is non-relational so they
 can get big without a problem.
 
 ### Database Denormalization and NoSQL
+
+#### Natural Aggregation
+Before one should move on to NoSQl type of database, he/she must decide on what are the typical queries that users submit. For example, a user constantly asks for his own messages. It's wise to nest users' messages underneath the user object in an document store. This way we are avoiding the painfully slow joins of relational databases.
+
+NoSQL's are very hard to "undo" a pattern of query. In SQL, we can always switch joins and submit different queries based on our needs. NoSQL does not offer this kind of flexibility
+
 #### Normalization
 What does normalization mean? It means that you don't duplicate data, cause if you have two copies of data and you fail to update one of them. The data-base will have a discrepancy between two pieces of data and they go out of sync.
 
@@ -186,17 +254,6 @@ Just a key-value store, a giant hash map
 #### Cassandra
 A distributed giant key-value store.
 
-### Database Sharding (Partitioning)
-Sharding means splitting the data across multiple machines while ensuring
-you have a way of figuring out which data is on which machine.
-
-* Vertical Partition: This is partition by features
-* Key-based or Hash-based Partition: This allocates data by hashing them and put
-them on different machines but adding additional servers means re-allocating
-all the data - very expensive task. Use __consistent hashing__ !
-* Directory-based Partition: Maintain a lookup table for where the data can
-be found.
-
 ### Metrics
 * Bandwidth: This is the maximum amount of data that can be transferred in
 a unit of time. kB/s
@@ -206,26 +263,6 @@ is the delay between the sender sending information and the receiver receiving i
 
 ---
 ## More topics
-### How to scale a relational database
-* If you have high read load, then master-slave replication.
-* If you have a high write load, then shard.
-* Can span many data centers!
-* If you have high write load across shards, you're f***ked. Stop using a relational DB.
-
-### Caching layer
-* Redis, Memcached
-* Completely in-memory, extremely fast
-* Key-value stores
-* Common queries or static data
-* Cache invalidation (using LRU)
-
-### Application Server
-* Many, many application servers running on many machines
-* Usually spun up on AWS or using bare metal (for Google/Netflix, etc.)
-  * Much cheaper than Heroku or managing your own
-  * Heroku is PaaS, AWS just provides you an out-of-the-box server
-* Checks the caching layer for most requests
-* Occasionally does the work to invalidate the cache
 
 ### Services vs monolith
 * SOA (service-oriented architecture)
@@ -247,25 +284,4 @@ is the delay between the sender sending information and the receiver receiving i
     * Microservices can be written in various languages, monolith is all in one language
     * Easier to do small refactorings
     * Harder to do big refactoring across many services
-
 * A little bit of overhead in messages
-
-### Client vs server
-* How should they talk? Use HTTP (via TCP), or use UDP?
-* What info should live on the client rather than the server?
-    * What needs to be persisted, and what's okay to lose?
-    * Scalability tradeoffs here
-    * What if client and server become inconsistent?
-
-### Asynchronous jobs
-* Does it need to be done *right this second*?
-* If not, just queue it up in a background process and tell your user you'll get it done!
-* Many, many things can be done asynchronously.
-    * Common message queues: RabbitMQ, Resque, Sidekiq
-
-### Load balancer
-* What if this goes down?
-    * More load balancers! Failover!
-* Round Robin DNS
-* Smart load balancing is ideal, but dumb is good enough
-* Put one into the database layer as well!
