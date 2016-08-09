@@ -1,5 +1,32 @@
 # Scalability & System Designs
 
+## Architecture vs Design
+### Example Questions
+#### What does a design question sound like?
+* How would you design a Scrabble game?
+* Walk me through how you'd make a Tetris game. How would you model the data?
+* Imagine you create a program that manages a car park. What are some architecture choices you make? (This is still a design question because a car park doesn't need to scale)
+
+#### What does an architecture question sound like?
+* How would you design Twitter?
+* Say you need to create a WhatsApp clone. Imagine you have millions of users. How do you build your system? What services do you create?
+* Explain to me how you'd architect an app like OpenTable.
+
+#### Bad answer for Architecture questions:
+
+* I'd make a Rails app. I'd use such and such models and here's my DB schema.
+
+### Heroku Toy Architecture
+* Rails app running on a single Heroku instance, running WEBrick server
+* Could probably service 100~ requests per minute
+* Rails app running on one Heroku instance, running Unicorn (multi-process server) or Puma (multi-threaded server)
+* Could probably service 500-2000 requests per minute
+* Puma spawns new worker. This is basically saying that multiple machines are hooked up.
+A central machine works as a master and tells other machines what to do and those other
+machines are the workers
+
+But what if you want to go bigger?
+
 ## Standard web app architecture
 ### Basic pieces:
 * Client
@@ -8,12 +35,6 @@
 * Caching layer
 * CDN(s)
 * Databases
-
-### Heroku Toy Architecture
-* Rails app running on a single Heroku instance, running WEBrick server
-* Could probably service 100~ requests per minute
-* Rails app running on one Heroku instance, running Unicorn (multi-process server) or Puma (multi-threaded server)
-* Could probably service 500-2000 requests per minute
 
 ### Horizontal vs Vertical Scaling
 * Vertical: increase the resources of a specific node.
@@ -95,7 +116,6 @@ Here are some complicated caching
 
 * Sideline cache
 
-
 ## CDNs
 * Way faster than serving content straight from your server.
 * Any JS and media files should live on the CDN and be served from there.
@@ -103,28 +123,7 @@ Here are some complicated caching
 * Your server should return *only* HTML markup.
 
 ## Databases
-Database is the toughest part to scale. If we can, it's best to avoid the issue altogether and just buy bigger hardware. Web application typically have a read/write ratio of somewhere between 80/20 and 90/10.
 
-If we can scale read capacity, we can solve a lot of situations. For read heavy application, master-slave is the answer.
-
-### Master-slave Replication
-Depends on implementation, various system has different approach toward replication but they all come down to the same idea. Whenever a file is written on a database, the master will duplicate this file and distribute the replicas across nodes.
-
-When client requests a file, the master will report to client the location of the file. Client will then directly access the node that is closest to him/her.
-
-For example, this is the Google File System
-![gfs]
-[gfs]: ../img/gfs.png
-
-### Database Denormalization and NoSQL
-Denormalization means adding redundant information into a database to
-speed up reads. For example, a person has pets. In a RDBMS, pets have owner_id
-and the person object access the pets through association and JOINs. But
-in a denormalized table, the pet information is stored on the persons table.
-
-A NoSQL database stores rows as something that's similar to a JSON object.
-NoSQL database does not have tables, it has collections. It means a collection
-of objects.
 ### Databases
 * Relational
   * PostgreSQL
@@ -139,11 +138,55 @@ of objects.
     * Cassandra (K-V like)
     * Riak  
 
+Database is the toughest part to scale. If we can, it's best to avoid the issue altogether and just buy bigger hardware. Web application typically have a read/write ratio of somewhere between 80/20 and 90/10. If we can scale read capacity, we can solve a lot of situations. For read heavy application, master-slave is the answer.
+
+### Master-slave Replication - Data Integrity
+Depends on implementation, various system has different approach toward replication but they all come down to the same idea. Whenever a file is written on a database, the master will duplicate this file and distribute the replicas across nodes.
+
+When client requests a file, the master will report to client the location of the file. Client will then directly access the node that is closest to him/her.
+
+For example, this is the Google File System
+![gfs]
+[gfs]: ../img/gfs.png
+
+### Relational Database
+Items are separated into different buckets. However, they are connected by their
+keys (foreign and primary.) JOIN is the answer to how to retrieve data in relational database. Items are linked to one another by their relationships.
+
 ### Relational databases are bad at scaling
 * Joins are inefficient when databases become humongous, and that's probably
-why MongDB called themselves hu-__mongo__ -ous.
+why MongDB called themselves hu-__mongo__ -ous. MongDB is non-relational so they
+can get big without a problem.
 
-## Database Sharding (Partitioning)
+### Database Denormalization and NoSQL
+#### Normalization
+What does normalization mean? It means that you don't duplicate data, cause if you have two copies of data and you fail to update one of them. The data-base will have a discrepancy between two pieces of data and they go out of sync.
+
+#### Denormalize
+Denormalization means adding redundant information into a database to
+speed up reads. For example, a person has pets. In a RDBMS, pets have owner_id
+and the person object access the pets through association and JOINs. But
+in a denormalized table, the pet information is stored on the persons table.
+
+__Misconception__: NoSQL doesn't mean No SQL at all, it means Not Only SQL. Thus, NoSQL database actually can do JOINs and relational query
+
+#### MongoDB
+A NoSQL database stores rows as something that's similar to a JSON object.
+NoSQL database does not have tables, it has collections. It means a collection
+of objects.
+
+In MongoDB, you have keys and values. The values are JSON. A key is associated
+with a giant JSON object. You can still do JOIN in MongoDB but it's a little more
+complicated than SQL databases. The key take away is that NoSQL does not follow
+an explicit schema.
+
+#### Reddis
+Just a key-value store, a giant hash map
+
+#### Cassandra
+A distributed giant key-value store.
+
+### Database Sharding (Partitioning)
 Sharding means splitting the data across multiple machines while ensuring
 you have a way of figuring out which data is on which machine.
 
@@ -154,16 +197,12 @@ all the data - very expensive task. Use __consistent hashing__ !
 * Directory-based Partition: Maintain a lookup table for where the data can
 be found.
 
-
-
-## Metrics
+### Metrics
 * Bandwidth: This is the maximum amount of data that can be transferred in
 a unit of time. kB/s
 * Throughput: This is the actual amount of data that is transferred
 * Latency: This is how long it takes data to go from one end to the other. It
 is the delay between the sender sending information and the receiver receiving it.
-
-
 
 ---
 ## More topics
@@ -225,7 +264,6 @@ is the delay between the sender sending information and the receiver receiving i
     * Common message queues: RabbitMQ, Resque, Sidekiq
 
 ### Load balancer
-* Balances load. Duh.
 * What if this goes down?
     * More load balancers! Failover!
 * Round Robin DNS

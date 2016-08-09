@@ -24,7 +24,7 @@ def transition_table(pattern, radix)
   table
 end
 
-def is_match(string, pattern, radix)
+def string_match(string, pattern, radix)
   table = transition_table(pattern, radix)
   num_of_states = table.keys.length - 1
   curr_state = "state:0"
@@ -36,4 +36,4 @@ def is_match(string, pattern, radix)
 end
 
 puts transition_table("acgt", ['a','c','g', 't']);
-puts is_match("acgacgacgaccgtgctgactacggtttacg", "acgt", ['a', 'c', 'g', 't'])
+puts string_match("acgacgacgaccgtgctgactacggtttacg", "acgt", ['a', 'c', 'g', 't'])

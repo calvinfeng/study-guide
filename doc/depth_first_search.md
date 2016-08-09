@@ -136,3 +136,28 @@ function depthFirstSearch(vertex, target) {
   return null;
 }
 ```
+#### Iterative DFS
+There are times when you need an iterative version of depth first search. For example,
+when you try to traverse two tree simultaneously, it's wise to use two stacks
+and fire DFS on them simultaneously.
+
+``` javascript
+function iterativeDFS(root, target) {
+  let stack = [root];
+  while (stack.length > 0) {
+    let currentNode = stack.pop();
+    if (currentNode.value === target) {
+      return currentNode;
+    } else {
+      let children = currentNode.children;
+      for (let i = children.length - 1; i >= 0; i--) {
+        stack.push(children[i]);
+      }
+    }
+  }
+  return null;
+}
+```
+It's similar to breadth first search, instead of using queue, it uses a stack.
+But if you want to search from left to right, that is, left most bottom child first, then
+when you push the child into the stack, pushes the right most child first.

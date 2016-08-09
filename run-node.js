@@ -1,3 +1,4 @@
+"use strict";
 var cache = {};
 function dynamicFib(n) {
   if (n <= 0) {
@@ -63,5 +64,67 @@ function merge(left, right, i) {
   }
 }
 
-var strArr = ["abc", "xyz", "opq", "rst", "uvw", "efg"];
-console.log(stringSort(strArr));
+// var strArr = ["abc", "xyz", "opq", "rst", "uvw", "efg"];
+// console.log(stringSort(strArr));
+
+function iterativeDFS(root, target) {
+  let stack = [root];
+  while (stack.length > 0) {
+    let currentNode = stack.pop();
+    if (currentNode.value === target) {
+      return currentNode;
+    } else {
+      let children = currentNode.children;
+      for (let i = children.length - 1; i >= 0; i--) {
+        stack.push(children[i]);
+      }
+    }
+  }
+  return null;
+}
+
+function breadthFirst(root, target) {
+  let queue = [root];
+  while (queue.length > 0) {
+    let currentNode = queue.shift();
+    if (currentNode.value === target) {
+      return currentNode;
+    } else {
+      let children = currentNode.children;
+      for (let i = 0; i < children.length; i++) {
+        queue.push(children[i]);
+      }
+    }
+  }
+  return null;
+}
+
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.children = [];
+  }
+}
+
+let root = new TreeNode(0);
+let a = new TreeNode(1.1);
+let b = new TreeNode(1.2);
+let c = new TreeNode(1.3);
+let d = new TreeNode(2.1);
+let e = new TreeNode(2.2);
+let f = new TreeNode(2.3);
+
+root.children.push(a,b,c);
+a.children.push(d, e);
+b.children.push(f);
+
+console.log(iterativeDFS(root, 4));
+console.log(breadthFirst(root, 4));
+
+// Frontend Angular JS
+// MySQL
+// Java
+// 7~8 People on a team
+// secure
+// testable
+// rgonugunta@clearslide.com
