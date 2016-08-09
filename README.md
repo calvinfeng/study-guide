@@ -4,6 +4,7 @@ guide outlines the major data structures and algorithms needed to succeed in
 technical interviews. The official guide was first written by Haseeb Qureshi,
 titled [How To Break Into The Tech Industry - a Guide to Job Hunting and Interviews][haseeb]
 on his personal blog site. This guide focuses on implementation details of the materials. However, please read Haseeb's guide at least once and follow his advice.
+
 [haseeb]: http://haseebq.com/#general-study
 
 ## Key Resources
@@ -23,6 +24,9 @@ on his personal blog site. This guide focuses on implementation details of the m
 [scale]:http://highscalability.com/all-time-favorites/
 [hacker]: https://news.ycombinator.com/
 
+## System Designs
+- [x] [Architecture Lecture & More][architecture]
+
 ## Data Structures
 - [x] [Stack & Queue][stack_and_queue]
 - [x] [LinkedList][linked_list]
@@ -34,7 +38,7 @@ on his personal blog site. This guide focuses on implementation details of the m
   - [x] Optional: AVL, 2-3 Tree, Red-Black Tree
 - [x] [Directed & Undirected Graphs][graph]
 - [x] [Tries][trie]
-- [ ] Suffix Tree (work in progress)
+- [x] [Suffix Tree][suffix]
 
 ## Algorithms
 
@@ -67,13 +71,6 @@ Coursera might have taken down the algorithm lectures. Use this link
 https://www.youtube.com/user/Rabynovych/playlists
 
 ### Week 1
-Coursera - Algorithms Part 1
-  * Stacks & Queues
-  * Elementary Sorts
-  * Merge Sort
-  * Quick Sort
-  * Hash Functions & Linear Probing
-
 #### Topics
 - [Dynamic Array or ArrayList(Java)][dynamic_array]
 - [Stack and Queue][stack_and_queue]
@@ -84,15 +81,14 @@ Coursera - Algorithms Part 1
 - [Binary Search][binary_search]
 - [Quick Sort][quick_sort]
 - [Merge Sort][merge_sort]
+- Coursera - Algorithms Part 1
+  * Stacks & Queues
+  * Elementary Sorts
+  * Merge Sort
+  * Quick Sort
+  * Hash Functions & Linear Probing
 
 ### Week 2
-Coursera - Algorithms Part 1
-  * Binary Heaps
-  * Heap Sort
-  * Binary Search Tree
-  * 2-3 Search Tree
-  * Red-Black Tree
-
 #### Topics
 - [Binary Heap][binary_heap]
 - Heap Sort
@@ -102,35 +98,46 @@ Coursera - Algorithms Part 1
 - [Depth-first Search][dfs]
 - [Tree Traversals][tree_traversal]
 - [Topological Sort][topo]
+- Coursera - Algorithms Part 1
+  * Binary Heaps
+  * Heap Sort
+  * Binary Search Tree
+  * 2-3 Search Tree
+  * Red-Black Tree
 
 ### Week 3
-Coursera - Algorithms Part 2
-  * Graphs (undirected)
-  * Connected Components
-  * Digraphs (directed)
-  * Radix Sort
-  * R-way Tries
-
 #### Topics
 - [Dijkstra's Algorithm][dijkstra]
 - [Suffix Tree][suffix]
 - [Trie or Prefix Tree][trie]
 - [Radix][radix]
 - [Dynamic Programming][dynamic]
-- [Scalability][scale]
+- [Manacher's Algorithm][manacher]
+- [Finite State Automata][finite-state]
+- [Bit Manipulation][bit]
+- Coursera - Algorithms Part 2
+  * Graphs (undirected)
+  * Connected Components
+  * Digraphs (directed)
+  * Radix Sort
+  * R-way Tries
 
+[architecture]: ./doc/scalability.md
 [bfs]: ./doc/breadth_first_search.md
 [binary_heap]: ./doc/binary_heap.md
 [binary_search]: ./doc/binary_search.md
+[bit]: ./doc/bit_manipulation.md
 [bst]: ./doc/binary_search_tree.md
 [dfs]: ./doc/depth_first_search.md
 [dijkstra]: ./doc/dijsktra.md
 [dynamic_array]: ./doc/dynamic_array.md
 [dynamic]: ./doc/dynamic_programming.md
+[finite-state]: ./doc/finite_state_automata.md
 [graph]: ./doc/graph.md
 [hash_map]: ./doc/hash_map.md
 [linked_list]: ./doc/linked_list.md
 [lru]: ./doc/lru.md
+[manacher]: ./doc/manacher.md
 [merge_sort]: ./doc/merge_sort.md
 [quick_sort]: ./doc/quick_sort.md
 [radix]: ./doc/radix.md
