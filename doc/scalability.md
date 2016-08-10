@@ -53,14 +53,15 @@ The most obvious method of load balancing is hashing.
 
 However, as you increase the number of servers over time, requests will get to
 directed to different machine. This can potentially create problems for some
-applications such as applications that rely on sharding to reduce write load. Thus,
-use consistent hashing technique.
+applications such as applications that rely on sharding to reduce write load.
+Thus, use consistent hashing technique.
 
 __Consistent Hashing__ is needed for balancing loads when servers are constantly added and removed.
 
-* What if this goes down?
-    * More load balancers! Failover!
-* Round Robin DNS
+What if a load balancer goes down?
+  * More load balancers! Failover!
+
+Use Round Robin DNS
 * Smart load balancing is ideal, but dumb is good enough
 * Put load balancer in database too if it's a distributed system
 
@@ -129,6 +130,10 @@ Any startup will start as a monolith and as it scales up, it will be broken down
 * If not, just queue it up in a background process and tell your user you'll get it done!
 * Many, many things can be done asynchronously.
 * Common message queues: RabbitMQ, Resque, Sidekiq
+* Resque
+  * Resque (pronounced like "rescue") is a Redis-backed library for creating background jobs, placing those jobs on multiple queues, and processing them later.
+* Sidekiq
+  * Simple, efficient background processing for Ruby.
 
 ### Queue
 __Synchronous systems__
@@ -252,7 +257,6 @@ why MongDB called themselves hu-__mongo__ -ous. MongDB is non-relational so they
 can get big without a problem.
 
 ### Database Denormalization and NoSQL
-
 #### Natural Aggregation
 Before one should move on to NoSQl type of database, he/she must decide on what are the typical queries that users submit. For example, a user constantly asks for his own messages. It's wise to nest users' messages underneath the user object in an document store. This way we are avoiding the painfully slow joins of relational databases.
 
@@ -291,3 +295,19 @@ a unit of time. kB/s
 * Throughput: This is the actual amount of data that is transferred
 * Latency: This is how long it takes data to go from one end to the other. It
 is the delay between the sender sending information and the receiver receiving it.
+
+## Facebook Design
+* Each user has a friend array
+* News Feed triggers a read for every single one of your friend
+* Facebook has a 5,000 friend limit because this method cannot scale
+* Reading is expensive, writing is cheap.
+
+## Twitter Design
+[Twitter System Design]
+* Each user has a list of feed
+  * the feed contains an array of tweet id
+* Every time a user sends out a feed, the feed will be written to every single follower of
+that user. This is a massive write-operation
+* Writing is expensive, reading is cheap
+
+[Twitter System Design]:https://highscalability.com/blog/2013/7/8/the-architecture-twitter-uses-to-deal-with-150m-active-users.html
