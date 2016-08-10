@@ -44,64 +44,85 @@ But what if you want to go bigger?
 ## Load Balancer
 The role of a load balancer is to distribute and direct requests evenly
 to all the servers.
-__Consistent Hashing__ is needed for balancing loads
-when servers are constantly added and removed.
+
+The most obvious method of load balancing is hashing.
+* Every server is a bucket
+* Every request that comes in can be represented IP address
+* Hash the IP address and mod the integer by the number of servers
+* Direct request to the bucket
+
+However, as you increase the number of servers over time, requests will get to
+directed to different machine. This can potentially create problems for some
+applications such as applications that rely on sharding to reduce write load. Thus,
+use consistent hashing technique.
+
+__Consistent Hashing__ is needed for balancing loads when servers are constantly added and removed.
 
 * What if this goes down?
     * More load balancers! Failover!
 * Round Robin DNS
 * Smart load balancing is ideal, but dumb is good enough
-* Put one into the database layer as well
+* Put load balancer in database too if it's a distributed system
 
 
 ## Application Servers
 
-Before we consider scaling the backend, the basic questions to ask are the following:
-### Client vs server
-* How should they talk? Use HTTP (via TCP), or use UDP?
-* What info should live on the client rather than the server?
-* What needs to be persisted, and what's okay to lose?
-* Scalability tradeoffs here
-* What if client and server become inconsistent?
-
 ### Scaling the Application
 * Create many, many application servers running on many machines
 * Usually spun up on AWS or using bare metal (for Google/Netflix, etc.)
+  * Bare metal is referring to go out there and buy your own machine to build servers
   * Much cheaper than Heroku or managing your own
-  * Heroku is PaaS, AWS just provides you an out-of-the-box server
+  * Heroku is Platform as a Service: it provides a platform that will automate the
+  the process of launching a Rails application.
+  * AWS is Infrastructure as a Service: it provides you an out-of-the-box server.
 * Checks the caching layer for most requests
 * Occasionally does the work to invalidate the cache
 
-### Sessions/States
-Sessions are state
-  * Local sessions = bad
-    * Stored on disk
-    * Stored in memory
-    * It's generally bad because you can't move users, you can't avoid hotspots
-    and there is no fault tolerance
-    * Custom built
-      * Store last session location in cookie
-      * If we hit a different server, pull our session information across
-    * If your load balancer has sticky sessions, you can still get hotspots
-  * Centralized sessions = good
-    * Store in a central database or an in-memory cache
-    * No porting around of session data
-    * No need for sticky sessions
-    * No hot spots
-    * Need to be able to scale the data store
-  * No sessions at all = great
-    * Stash it all in a cookie
-    * If you need more than the cookie (login status, user id, username),
-    then pull their account row from the database or the account cache
-    * None of the drawbacks of sessions
-    * Avoids the overhead of a query per page
-      * Great for high volume pages which need little personalization
-      * You can stick quite a lot in the cookie too
-      * Pack with base64 and it's easy to delimite fields
+### Services vs Monolith
+* SOA (Service-Oriented Architecture)
+* Also known as "micro-services"
+* Monoliths (what you know)
 
-The bottom line is, scaling web application server can be done with the idea
-of stateless and build many servers to handle requests. But, of course, don't forget
-to use load balancer to direct requests. However, the rests are trickier
+### Example of services
+#### Uber
+* Routing service
+* Dispatch service
+* Payment processing service
+* Reviewing service
+* User authentication service
+
+### Pros and cons of SOA (Server Oriented Architecture)
+* Failures can be isolated to particular services without taking down to the entire system
+* Monolith system will go down even if a small part of the system breaks
+* Easy to divide among teams, a team can keep their codebase small and understandable
+* Micro-services can be written in various languages, monolith is all in one language
+* Easier to do small re-factorings
+* Harder to do big refactoring across many services
+* A little bit of overhead in messages
+* Communication between services will become very complicated
+
+Any startup will start as a monolith and as it scales up, it will be broken down into micro-services
+
+### Client vs server
+* How should they talk? Use HTTP (via TCP), or use UDP?
+  * TCP - connection based, three-way handshake.
+    * Sender requests connection
+    * Receiver responds with acknowledgement
+    * Sender receives acknowledge and begins sending packages
+    * Packets will be received in correct order
+    * A lot of overhead, many acknowledgements
+  * UDP - connectionless, relatively unreliable transfer protocol
+    * UDP does not guarantee order in packet delivery
+    * Data corruption is a common error on the internet. When UDP transport
+    layer detects a data corruption, it will not try to recover it, instead
+    it will just discard it. This is why UDP may seem as an unreliable
+    transfer protocol
+    * UDP is lower latency, ideal for video and voice communications
+* What info should live on the client rather than the server?
+  * What needs to be persisted, and what's okay to lose?
+  * Scalability tradeoffs here
+  * What if client and server become inconsistent?
+    * in-sync or out-of-sync? a business decision
 
 ### Asynchronous jobs
 * Does it need to be done *right this second*?
@@ -131,7 +152,24 @@ Following is the flow for __asynchronous systems__:
 [asyn]: ../img/asyn_system.png
 
 ## Caching Layer
-Caching avoids the need to scale or at least make it cheaper.The challenge of cache is when we try to write to the cache
+Caches are important to prevent data base from getting smashed by heavy requests.
+Caching avoids the need to scale or at least make it cheaper. The challenge of cache
+is when we try to write to the cache.
+
+Cache layer is basically a big chunk of memory.
+
+Redis and Memcached are the popular choices for caching layer
+* Properties
+  * Completely in-memory, extremely fast
+  * Key-value store
+    * All caches are essentially key-value store
+    * They are giant hash maps
+  * What are stored in the cache?
+    * Common queries or static data
+    * Any query that hits the database, will go through the cache first
+  * Cache invalidation (using LRU)
+    * Cache invalidation is a very rich topic in distributed systems
+    * Below is a list of complicated caching technique
 
 Here are some complicated caching
 
@@ -147,15 +185,9 @@ Here are some complicated caching
 
 * Sideline cache
 
-Here are some options for caching
-* Redis, Memcached
-  * Completely in-memory, extremely fast
-  * Key-value stores
-  * Common queries or static data
-  * Cache invalidation (using LRU)
-
 ## CDNs
-CDNs are giant data centers that are designed to send large files to requested destination. CDNs are optimized to deliver large size content
+CDNs are giant data centers that are designed to send large files to requested destination.
+CDNs are optimized to deliver large size content
 
 * Way faster than serving content straight from your server.
 * Any JS and media files should live on the CDN and be served from there.
@@ -167,8 +199,7 @@ CDNs are giant data centers that are designed to send large files to requested d
 * Your server should return *only* HTML markup.
 
 ## Databases
-
-### Databases
+### Types of Database
 * Relational
   * PostgreSQL
   * MySQL
@@ -260,28 +291,3 @@ a unit of time. kB/s
 * Throughput: This is the actual amount of data that is transferred
 * Latency: This is how long it takes data to go from one end to the other. It
 is the delay between the sender sending information and the receiver receiving it.
-
----
-## More topics
-
-### Services vs monolith
-* SOA (service-oriented architecture)
-* Also known as "microservices"
-* Monoliths (what you know)
-
-### Example of services
-#### Uber
-  * Routing service
-  * Dispatch service
-  * Payment processing service
-  * Reviewing service
-  * User authentication service
-
-### Pros and cons of SOA (Server Oriented Architecture)
-* Failures can be isolated to particular services without taking down to the entire system
-
-* Easy to divide among teams, a team can keep their codebase small and understandable
-    * Microservices can be written in various languages, monolith is all in one language
-    * Easier to do small refactorings
-    * Harder to do big refactoring across many services
-* A little bit of overhead in messages
