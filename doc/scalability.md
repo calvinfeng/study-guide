@@ -271,6 +271,13 @@ speed up reads. For example, a person has pets. In a RDBMS, pets have owner_id
 and the person object access the pets through association and JOINs. But
 in a denormalized table, the pet information is stored on the persons table.
 
+| Pros of Denormalization                     | Cons of Denormalization                       |
+| ------------------------------------------- | --------------------------------------------- |
+| Fast data retrieval since we do fewer joins | Updates and inserts are more expensive        |
+| Simpler queries, fewer tables               | Update and insert code are difficult to write |
+|                                             | Data may become inconsistent                  |
+|                                             | Redudancy leads to more space usage           |
+
 __Misconception__: NoSQL doesn't mean No SQL at all, it means Not Only SQL. Thus, NoSQL database actually can do JOINs and relational query
 
 #### MongoDB
