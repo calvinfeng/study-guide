@@ -6,6 +6,7 @@ takes O(n) time, because all trailing elements need to copy over to next spot.
 LinkedList also maintains order.
 
 ## Implementation
+### Doubly Linked List
 ``` ruby
 class Link
   attr_accessor :key, :val, :next, :prev
@@ -98,6 +99,81 @@ class LinkedList
   end
 end
 ```
+### Singly Linked List
+Occasionally, actually only once for me, that singly linked list will show up on an
+interview. Singly linked list seems easier to implement that doubly linked list on a
+first glance but deletion in singly linked list requires a second thought.
+
+Each link inside a singly linked list does not have a pointer to its previous link. That
+is problematic for deletion because when you try to remove a link, you need to connect
+its previous link to its next link. Thus, we need two link runners.
+
+``` ruby
+class Link
+  attr_accessor :val, :next
+  def initialize(val)
+    @val = val
+    @next = nil
+  end
+end
+
+class SinglyLinkedList
+  attr_reader :head, :tail
+
+  def initialize
+    @head = Link.new("head")
+    @tail = @head
+  end
+
+  def is_empty?
+    @head == @tail
+  end
+
+  def first_link
+    is_empty? ? null : @head.next
+  end
+
+  def insert(val)
+    new_link = Link.new(val)
+    @tail.next = new_link
+    @tail = new_link
+  end
+
+  def delete(val)
+    if is_empty?
+      raise "linked list is empty"
+    else
+      this_link = @head.next
+      prev_link = @head
+      while this_link != @tail
+        if this_link.val == val
+          prev_link.next = this_link.next
+          this_link = this_link.next
+        else
+          prev_link = this_link
+          this_link = this_link.next
+        end
+      end
+
+      if @tail.val == val
+        @tail = prev_link
+        prev_link.next = nil
+      end
+    end
+  end
+
+  def to_s
+    str = ""
+    current_link = @head
+    while current_link != @tail
+      str += current_link.val.to_s + " "
+      current_link = current_link.next
+    end
+    str + @tail.val.to_s
+  end
+end
+```
+
 
 ## Interview Problems
 `remove_dups` - write code to remove duplicates from an unsorted linked list
@@ -180,8 +256,8 @@ def sum_lists(list1, list2)
     digit_sum = digit_sum % 10
     resultant_list.insert(digit_sum)
 
-    runner1 = runner1.next
-    runner2 = runner2.next
+    runner1 = runner1.next unless runner1.nil?
+    runner2 = runner2.next unless runner2.nil?
   end
   resultant_list
 end
