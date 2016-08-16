@@ -129,7 +129,7 @@ https://www.youtube.com/user/Rabynovych/playlists
 [bit]: ./doc/bit_manipulation.md
 [bst]: ./doc/binary_search_tree.md
 [dfs]: ./doc/depth_first_search.md
-[dijkstra]: ./doc/dijsktra.md
+[dijkstra]: ./doc/dijkstra.md
 [dynamic_array]: ./doc/dynamic_array.md
 [dynamic]: ./doc/dynamic_programming.md
 [finite-state]: ./doc/finite_state_automata.md
