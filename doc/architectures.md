@@ -34,7 +34,7 @@ of photo data for Instagram. They use Amazon CloudFront as CDN, which helps with
 times from users around the world (like in Japan, second most popular country)
 
 They use Redis extensively, it powers their main feed, activity feed, session system,
-and other related systems. All of Redis' data needs to fit in memory, so we end up
+and other related systems. All of Redis' data needs to fit in memory, so they end up
 running several Quadruple Extra-Large memory instances for Reddis, too, and occasionally
 shard across a few Redis instances for any given subsystem. They run Redis in a master-replica
 setup and have the replicas constantly saving the DB out to disk, and finally use
@@ -44,11 +44,11 @@ EBS snapshots to back those DB dumps.
   and message broker.)
 
 ### Task Queue
-When a user decides to share out an Instagram photo to Twitter or Facebok, or when we need
-to notify one of the Real-time subscribers of a new photo posted, they push that task into
+When a user decides to share out an Instagram photo to Twitter or Facebok, or when Instagram needs
+to notify one of the Real-time subscribers of a new photo posted, Instagram pushes that task into
 Gearman, a task queue system originally written at Danga. Doing it asynchronously through
 the task queue means that media uploads can finish quickly, while the heavy lifting can
-run in the background. They have about 200 workers all written in Python, consuming
+run in the background. Instgram has about 200 workers all written in Python, consuming
 the task queue at any given time.
 
 ## CinchCast
