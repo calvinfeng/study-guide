@@ -246,6 +246,7 @@ Here are some complicated caching
 * Sideline cache
 
 There are two patterns of caching your data, an old one and a new one:
+
 1. Cached Database Queries
   That's still the most commonly used caching pattern. Whenever you do a query to your
   database, you store the result dataset in cache. A hashed version of your query is the

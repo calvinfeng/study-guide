@@ -73,10 +73,65 @@ on multiple machines.
 
 ```
 Bottlenecks:
-
 Traffic is not going to be hard
 Data is the only concern, we need to index directly into the url we need.
 ```
 
 ### Step 4 Scaling your abstract design
 Time to make it scale!
+
+#### Everything is a trade off
+This is the one of the most fundamental concepts in system design.
+
+There rarely is one perfect way to do things. Each company ends up with
+a different architecture. Designing a scalable system is an optimization task;
+there are tons of constraints (time, budget, knowledge, complexity, technologies currently
+available, etc...) Every technology, every pattern is great for somethings, and not
+so great for others. Understanding these props and cons, the advtanges
+and disadvantages, is the key.
+
+Being able to understand and discuss these trade-offs is what system design
+is all about.
+
+Going back to the URL shortening example:
+
+Scalable Design:
+1. Application Service Layer
+  * Start with one machine
+  * Add a load balancer and a cluster of machines over time
+    * Usually there's spike in traffic. We can activate the cluster when
+    we experience a spike in traffic but then we turn it off when the spike
+    is gone
+  * We need to add redundancy because we expect high availability
+
+2. Data Storage Layer
+  * We have the following requirements:
+    * Billion of objects
+    * Each object is fairly small
+    * There are no relationships between the objects
+    * Reads are 9x more frequent than writes
+    * 3TB of urls, 36GB of hashes
+  * MySQL:
+    * Widely used
+    * Mature technology
+    * Clear scaling paradigms (sharding, master/slve replication, master/master replication)
+    * Used by Facebook, Twitter, Google, and etc...
+    * Index lookups are very fast
+  * Approach and Design:
+    * Mapping
+      * hash: varchar(6) - we only need 6 characters for the shortened URL
+      * original_url: varchar(512)
+    * Create an unique index on the hash (36GB+) and we want to call it in memory
+      * We have two options
+        1. Vertical scaling: increase the memory on the data server.
+        2. Horizontal scaling: partition the data into multiple disk spaces. It's good to have a
+        good partition strategy early on. As the site gets more popular, it will be easy
+        to add more machines to scale horizontally.
+      * In case this skyrockets so hard, we need to do master-slave replications. We will
+      direct read to slaves and direct writes to master
+    * Strategy:
+      * Start off with vertical scaling, just buy more hardware and stack it on
+      * Eventually, we will hit the ceiling, we then partition the data by taking
+      the first character of the shortened url and converted it to ascii code, mod it
+      by the number of partitions, put it there. (Perhaps we will need consistent hashing technique soon)
+      * Then we will need to seek a master-slave setup at the very end. 
