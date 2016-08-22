@@ -38,12 +38,18 @@ But what if you want to go bigger?
 
 ### Horizontal vs Vertical Scaling
 * Vertical: increase the resources of a specific node.
-* Horizontal: increase the number of nodes
+* Horizontal: increase the number of nodes or servers
 
 
 ## Load Balancer
 The role of a load balancer is to distribute and direct requests evenly
 to all the servers.
+
+When request comes in, the DNS will map domain name to IP address of the black box
+load balancer. The servers within the cluster don't have public IP address assigned
+to themselves. Rest of the world won't be able to interact with the servers inside
+the cluster directly. The load balancer is responsible for distributing the HTTP
+requests to one of the nodes in its cluster.
 
 The most obvious method of load balancing is hashing.
 * Every server is a bucket
@@ -59,11 +65,61 @@ Thus, use consistent hashing technique.
 __Consistent Hashing__ is needed for balancing loads when servers are constantly added and removed.
 
 What if a load balancer goes down?
-  * More load balancers! Failover!
+  * We need fail over, thus more load balancers. Load balancers are generally very expensive.
+  We will only need a couple of them as back ups.
 
-Use Round Robin DNS
-* Smart load balancing is ideal, but dumb is good enough
-* Put load balancer in database too if it's a distributed system
+Essentially load balancer is a fancy DNS server with built-in logic that distributes load.
+The most direct and naive solution to load balancing is *round robin*. However, smarter solution
+does exist and we do need them.
+
+Example of LB Software & Hardware:
+* Software
+  * ELB
+  * HAProxy
+  * LVS
+
+* Hardware
+  * Barracuda
+  * Cisco
+  * Citrix
+  * F5
+
+### Potential Problem
+There is a potential problem with load balancing using round robin DNS technique.
+Remember that browser will typically cache the http response from servers and record
+the IP address in cookies, so when user tries to re-visit the same website, the broswer
+does not need to submit a DNS lookup to DNS server. Just by bad luck, server A gets
+a power user, who consumers considerable amount of computational resources. Using round robin DNS,
+other users may still get distributed to server A and eventually create a heavy load on server A.
+
+Thus, in this case, caching is contributing to a disproportionate amount of load
+across servers. We need a smart solution. We need to re-configure our load balancer so
+that all traffic will be directed to a single IP address, which is the address of the
+master load balancer. The load balancer will then use other heuristics to decide
+which server/node it should send the request to, perhaps based on usage and server load.
+
+### Sticky Session
+Before we consider a distributed database management system, we should take a look at a simple
+architecture.
+
+![load]
+[load]: ../img/load.png
+
+Not all applications are truly stateless. Some of them do store states locally in memory
+in the application server layer. So despite HTTP being "stateless" protocol, many applications
+that store state locally don't perform well in a load-balanced environment. Also, some application
+servers have databases integrated. Databases don't communicate with each other. Thus, data become
+desynchronized when user gets distributed to a new place every time he/she makes a request to
+visit the website.
+
+Then now sticky session comes into play. Sticky session makes load balancer distributes users
+back to the servers where they had sessions opened. But... ultimately we should stick to
+stateless services. DON'T STORE SESSION STATES ON APPLICATION SERVERS!
+
+If session state is very painful to lose (e.g. shopping carts), store it in a central database and
+clear out old sessions periodically. If session state is not critical (e.g. username/avatar URL),
+then stick it in a cookie-- just make sure you're not shoving too much data into the cookie.
+
 
 
 ## Application Servers
@@ -163,7 +219,7 @@ is when we try to write to the cache.
 
 Cache layer is basically a big chunk of memory.
 
-Redis and Memcached are the popular choices for caching layer
+Redis and MemcacheD are the popular choices for caching layer
 * Properties
   * Completely in-memory, extremely fast
   * Key-value store
@@ -174,7 +230,6 @@ Redis and Memcached are the popular choices for caching layer
     * Any query that hits the database, will go through the cache first
   * Cache invalidation (using LRU)
     * Cache invalidation is a very rich topic in distributed systems
-    * Below is a list of complicated caching technique
 
 Here are some complicated caching
 
@@ -189,6 +244,27 @@ Here are some complicated caching
   * Con - Backend data and cache are not consistent and in the event of hardware failure, all newly obtained data are lost because the cache didn't have a chance to copy them to the databse
 
 * Sideline cache
+
+There are two patterns of caching your data, an old one and a new one:
+1. Cached Database Queries
+  That's still the most commonly used caching pattern. Whenever you do a query to your
+  database, you store the result dataset in cache. A hashed version of your query is the
+  cache key. The next time you run the query, you first check if it is already in the cache.
+  This pattern has several issues. The main issue is the expiration. It is hard to
+  delete a cached result when you cache a complex query.
+
+2. Cached Objects
+  In general, see your data as an object like you already do in your code. Let your
+  class assemble a dataset from your database and then store the complete instance
+  of the class or the assembled dataset in the cache. You have, for example, a class
+  called "Product" which has a property called "data". It is an array containing prices,
+  texts, pictures, and customer reviews of your product. The property "data" is filled
+  by several methods in the class doing several database requests which are hard to cache, since
+  many things relate to each other. Now do the following: when your class has finished the
+  "assembling" of the data array, directly store the data array, or better yet, the
+  complete instance of the class, in the cache! This allows you to easily get rid of
+  the object whenever something did change and makes the overall operation of your code
+  faster and more logical.
 
 ## CDNs
 CDNs are giant data centers that are designed to send large files to requested destination.
@@ -220,7 +296,22 @@ CDNs are optimized to deliver large size content
 
 Database is the toughest part to scale. If we can, it's best to avoid the issue altogether and just buy bigger hardware. Web application typically have a read/write ratio of somewhere between 80/20 and 90/10. If we can scale read capacity, we can solve a lot of situations. For read heavy application, master-slave is the answer.
 
-### Master-slave Replication - Data Integrity
+### Relational Database
+Items are separated into different buckets. However, they are connected by their
+keys (foreign and primary.) JOIN is the answer to how to retrieve data in relational database.
+Items are linked to one another by their relationships.
+
+If you want your application to handle a lot of complicated querying, database transactions, and routine analysis of data, you want to stick with a relational database. If your application is going to focus on doing many database transactions, it's important that those transactions are processed reliably. This is where ACID really matters.
+
+#### How to scale a relational database
+* If you have high read load, then master-slave replication.
+  * Use more slaves if read is monstrously heavy.
+* If you have a high write load, then shard.
+  * Distribute write across many servers
+* Buy more data centers!
+  * Lastly, just throw money at it
+
+### Master-Slave (READ)
 Depends on implementation, various system has different approach toward replication but they all come down to the same idea. Whenever a file is written on a database, the master will duplicate this file and distribute the replicas across nodes.
 
 When client requests a file, the master will report to client the location of the file. Client will then directly access the node that is closest to him/her.
@@ -229,20 +320,23 @@ For example, this is the Google File System
 ![gfs]
 [gfs]: ../img/gfs.png
 
-### Relational Database
-Items are separated into different buckets. However, they are connected by their
-keys (foreign and primary.) JOIN is the answer to how to retrieve data in relational database. Items are linked to one another by their relationships.
+This is a typical topology for read heavy architecture
 
-#### How to scale a relational database
-* If you have high read load, then master-slave replication.
-* If you have a high write load, then shard.
-* Can span many data centers!
-* If you have high write load across shards, you're fucked. Stop using a relational DB.
+![archi]
+[archi]: ../img/archi.png
 
-Since you are fucked, now comes the solution
-### Database Sharding (Partitioning)
+If three slaves are not enough to handle the amount of read requests, then we can opt for more
+slaves and distribute load evenly across them. However, there's a cost.
+The replication part will be expensive. If we have n slaves, then the write will be
+multiplied by the factor of n.
+
+### Database Sharding and Partitioning (WRITE)
 Sharding means splitting the data across multiple machines while ensuring
-you have a way of figuring out which data is on which machine.
+you have a way of figuring out which data is on which machine. This is a method of
+distributing write across many servers. For example, let's say we have 1 million users.
+Each person is writing 1 Mb per second. Then we will have 1,000,000 Mb/s to our databases.
+The only way to speed is up divide this 1,000,000 into many small shards. Perhaps, 1,000
+databases each handles 1000 Mb/s. By the way, 1,000,000 Mb/s is ridiculously big.
 
 * Vertical Partition: This is partition by features
 * Key-based or Hash-based Partition: This allocates data by hashing them and put
@@ -251,12 +345,35 @@ all the data - very expensive task. Use __consistent hashing__ !
 * Directory-based Partition: Maintain a lookup table for where the data can
 be found.
 
-### Relational databases are bad at scaling
-* Joins are inefficient when databases become humongous, and that's probably
-why MongDB called themselves hu-__mongo__ -ous. MongDB is non-relational so they
-can get big without a problem.
+![partition]
+[partition]: ../img/partition.png
 
-### Database Denormalization and NoSQL
+### Relational databases are bad at scaling write
+Traditional ACID-compliant databases like RDBSM can scale reads using master-slave approach, but due to constraints imposed by the ACID principle, scaling write is very difficult.
+
+* Atomicity means that transactions must complete or fail as a whole, so a lot of bookkeeping must be done behind the scenes to guarantee this. For example, suppose you run an online book store and you proudly display how many of each book you have in your inventory. Every time someone is in the process of buying a book, you lock part of the database until they finish so that all visitors around the world will see accurate inventory numbers.
+
+* Consistency constraints mean that all nodes
+in the cluster must be identical. If you write to one node, this write must be copied to all other nodes before returning a response to the client. This makes a traditional RDBMS cluster hard to scale.
+
+* Durability constraints mean that in order to never lose a write you must ensure that before a response is returned to the client, the write has been flushed to disk.
+
+To scale up write operations or the number of nodes in a cluster beyond a certain point you have to be able to relax some of the ACID requirements:
+
+* Dropping atomicity lets you shorten the time tables (sets of data) are locked. Example: MongoDB, CouchDB
+* Dropping consistency lets you scale up writes across cluster nodes. Example: Riak, Cassandra
+* Dropping durability lets you respond to write commands without flushing to disk. Examples: MemCacheD, Redis.
+
+There is a computer science theorem that quantifies the inevitable trade-offs. Eric Brewer's CAP theorem states that if you want consistency, availability, and partition tolerance, you have to settle for two out of three. For a distributed system, partition tolerance means the system will continue to work unless there is a total network failure.
+
+BASE:
+  * Basic Availability
+  * Soft-state
+  * Eventual consistency
+
+Few notes: JOINs are not inherently slow if done correctly. However, as table size gets really big. De-normalization is probably the way to go. However, it's a deep rabbit hole. Relational databases are designed to do complex queries really well. If one opts to de-normalization, he/she will lose the flexibility to do complex queries in the future.
+
+### Database Denormalization
 #### Natural Aggregation
 Before one should move on to NoSQl type of database, he/she must decide on what are the typical queries that users submit. For example, a user constantly asks for his own messages. It's wise to nest users' messages underneath the user object in an document store. This way we are avoiding the painfully slow joins of relational databases.
 
@@ -280,6 +397,9 @@ in a denormalized table, the pet information is stored on the persons table.
 
 __Misconception__: NoSQL doesn't mean No SQL at all, it means Not Only SQL. Thus, NoSQL database actually can do JOINs and relational query
 
+### NoSQL
+If you're dealing with phenomenally huge amount of data, it can be too tedious and the probability of error increases. In that situation, you may need to consider going with a non-relational database. A non-relational database just stores data without explicit and structured mechanisms to link data from different tables to one another.
+
 #### MongoDB
 A NoSQL database stores rows as something that's similar to a JSON object.
 NoSQL database does not have tables, it has collections. It means a collection
@@ -290,13 +410,24 @@ with a giant JSON object. You can still do JOIN in MongoDB but it's a little mor
 complicated than SQL databases. The key take away is that NoSQL does not follow
 an explicit schema.
 
-#### Reddis
-Just a key-value store, a giant hash map
+##### Advantage
+One of the biggest advantage in going with non-relational database is that your database
+is not at risk for SQL injection attacks, because non-relational database don't use SQL
+and are for the most part schema-less. Another major advantage, at least with Mongo, is that
+you can theoretically shard it forever. Sharding distributes the data across partitions
+to overcome hardware limitations.
 
-#### Cassandra
-A distributed giant key-value store.
+#### Disadvantage
+In non-relational databases like Mongo, there are no joins like there would be in relational databases. This means you need to perform multiple queries and join the data manually within your code -- and that can get very ugly, very fast.
 
-### Metrics
+Since Mongo doesn’t automatically treat operations as transactions the way a relational database does, you must manually choose to create a transaction and then manually verify it, manually commit it or roll it back.
+
+
+#### More Examples
+* Reddis - k-v store, a giant hash map
+* Cassandra - a distributed giant k-v store
+
+## Metrics
 * Bandwidth: This is the maximum amount of data that can be transferred in
 a unit of time. kB/s
 * Throughput: This is the actual amount of data that is transferred

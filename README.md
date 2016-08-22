@@ -25,7 +25,9 @@ on his personal blog site. This guide focuses on implementation details of the m
 [hacker]: https://news.ycombinator.com/
 
 ## System Designs
-- [x] [Architecture Lecture & More][architecture]
+- [x] [Scalability Lecture & More][scalability]
+- [x] [Real Life Architectures][architectures]
+- [x] [Interview Tips][sys-design-interview]
 
 ## Data Structures
 - [x] [Stack & Queue][stack_and_queue]
@@ -122,7 +124,9 @@ https://www.youtube.com/user/Rabynovych/playlists
   * Radix Sort
   * R-way Tries
 
-[architecture]: ./doc/scalability.md
+[scalability]: ./doc/scalability.md
+[architectures]: ./doc/architectures.md
+[sys-design-interview]: ./doc/sd_interview.md
 [bfs]: ./doc/breadth_first_search.md
 [binary_heap]: ./doc/binary_heap.md
 [binary_search]: ./doc/binary_search.md
