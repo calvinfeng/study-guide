@@ -126,7 +126,7 @@ https://www.youtube.com/user/Rabynovych/playlists
 
 [scalability]: ./doc/scalability.md
 [architectures]: ./doc/architectures.md
-[sys-design-interview]: ./doc/sd_interview.md
+[sys-design-interview]: ./doc/system_design_interview.md
 [bfs]: ./doc/breadth_first_search.md
 [binary_heap]: ./doc/binary_heap.md
 [binary_search]: ./doc/binary_search.md

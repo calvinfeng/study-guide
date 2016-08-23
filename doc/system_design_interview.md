@@ -15,39 +15,37 @@ minutes questioning your interviewer and agreeing on the scope of the system.
 For example, the URL shortening service could be meant to be serve just a few
 thousand users, but each could be sharing millions of URLs. It could be meant to
 handle millions of clicks on the shortened URLs or dozens. The service may have
-to provide extensive statistics about each shrotened URL.
+to provide extensive statistics about each shortened URL.
 
-```
-Use cases:
-1. Shortening: take a url => return a much shorter url
-2. Redirection: take a short url => re-direct to the original url
-3. Custom url
+#### Use Cases:
+1. Shortening: take an url and return a much shorter url
+2. Redirection: take an short url and re-direct to the original url
+3. Custom url: allow user to create their own shortened url
 4. High availability of the system
 
-Out of scope:
+#### Out of Scope:
 4. Analytics
 5. Automatic link expiration
 6. Manual link removal
 7. UI vs API
 
-Constraints:
-Large percentage of URL shortening usage is driven by tweets
-1.5 billion new tweets per month
-All shortened URLs per month: 1.5 billion
-Sites below the top 3: shorten 300 million per month
+#### Constraints:
+Large percentage of URL shortening usage is driven by tweets. There are 1.5 billion new tweets per month. We can make some assumptions or at least estimation. We know that shortening request is much less frequent than re-redirecting request. Not every tweet has some links in it. For a safe number, let's assume we get 1 billion requests per month.
 
-1. 100 million new urls per month
-2. 1 billion requests per month
-3. 10% from shortening and 90% from redirection
-4. Requests per second: 400+ (40 shortens, 360 redirects approximately)
-5. 6 billion URLS in 5 years
-6. 500 bytes per URL
-7. 6 bytes per hash
+1. One billion requests per month
+2. Traffic: 10％ from shortening and 90% from redirection
+3. 100 million new urls per month
+4. 900 million redirections per month
+5. Requests per second: 400+
+6. 6 billion URLs in 5 years
+7. 500 bytes per URL
+8. 6 bytes per hash
 
 So we will have 3000 billion bytes for URL, 3TB for all urls and 36 GB for all hashes (over 5 years)
-New data written per second: 40*(500 + 6): 20 KB/s
-Read data per second: 360*506 bytes: 180KB/s
-```
+
+Write per second: 40*(500 + 6) = 20 KB/s
+
+Read per second: 360*506 bytes = 180KB/s
 
 ### Step 2 Abstract design
 Once you've scoped the system you're about to design, you should continue by outlining
@@ -71,11 +69,9 @@ Perhaps your system needs a load balancer and many machines behind it to handle 
 requests. Or maybe the data is so huge that you need to distribute your database
 on multiple machines.
 
-```
-Bottlenecks:
-Traffic is not going to be hard
-Data is the only concern, we need to index directly into the url we need.
-```
+#### Bottlenecks:
+* Traffic is not going to be hard
+* Data is the only concern, we need to index directly into the url we need.
 
 ### Step 4 Scaling your abstract design
 Time to make it scale!
@@ -114,13 +110,13 @@ Scalable Design:
   * MySQL:
     * Widely used
     * Mature technology
-    * Clear scaling paradigms (sharding, master/slve replication, master/master replication)
+    * Clear scaling paradigms (sharding, master/slave replication, master/master replication)
     * Used by Facebook, Twitter, Google, and etc...
     * Index lookups are very fast
   * Approach and Design:
     * Mapping
-      * hash: varchar(6) - we only need 6 characters for the shortened URL
-      * original_url: varchar(512)
+      * hash: VARCHAR(6) - we only need 6 characters for the shortened URL
+      * original_url: VARCHAR(512)
     * Create an unique index on the hash (36GB+) and we want to call it in memory
       * We have two options
         1. Vertical scaling: increase the memory on the data server.
@@ -134,4 +130,4 @@ Scalable Design:
       * Eventually, we will hit the ceiling, we then partition the data by taking
       the first character of the shortened url and converted it to ascii code, mod it
       by the number of partitions, put it there. (Perhaps we will need consistent hashing technique soon)
-      * Then we will need to seek a master-slave setup at the very end. 
+      * Then we will need to seek a master-slave setup at the very end.

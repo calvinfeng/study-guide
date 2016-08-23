@@ -87,10 +87,11 @@ Example of LB Software & Hardware:
 ### Potential Problem
 There is a potential problem with load balancing using round robin DNS technique.
 Remember that browser will typically cache the http response from servers and record
-the IP address in cookies, so when user tries to re-visit the same website, the broswer
+the IP address in cookies, so when user tries to re-visit the same website, the browser
 does not need to submit a DNS lookup to DNS server. Just by bad luck, server A gets
-a power user, who consumers considerable amount of computational resources. Using round robin DNS,
-other users may still get distributed to server A and eventually create a heavy load on server A.
+a power user, who consumers considerable amount of computational resources.
+Using round robin DNS, other users may still get distributed to server A and eventually
+create a heavy load on server A.
 
 Thus, in this case, caching is contributing to a disproportionate amount of load
 across servers. We need a smart solution. We need to re-configure our load balancer so
@@ -99,8 +100,8 @@ master load balancer. The load balancer will then use other heuristics to decide
 which server/node it should send the request to, perhaps based on usage and server load.
 
 ### Sticky Session
-Before we consider a distributed database management system, we should take a look at a simple
-architecture.
+Before we consider a distributed database management system, we should take a look at a
+simple architecture.
 
 ![load]
 [load]: ../img/load.png
@@ -119,8 +120,6 @@ stateless services. DON'T STORE SESSION STATES ON APPLICATION SERVERS!
 If session state is very painful to lose (e.g. shopping carts), store it in a central database and
 clear out old sessions periodically. If session state is not critical (e.g. username/avatar URL),
 then stick it in a cookie-- just make sure you're not shoving too much data into the cookie.
-
-
 
 ## Application Servers
 
@@ -290,7 +289,7 @@ CDNs are optimized to deliver large size content
   * Document-based (XML/JSON)
     * MongoDB
   * K-V stores
-    * Redis (also caching layer)
+    * Redis (also provides caching layer)
   * Distributed databases
     * Cassandra (K-V like)
     * Riak  
@@ -339,15 +338,47 @@ Each person is writing 1 Mb per second. Then we will have 1,000,000 Mb/s to our 
 The only way to speed is up divide this 1,000,000 into many small shards. Perhaps, 1,000
 databases each handles 1000 Mb/s. By the way, 1,000,000 Mb/s is ridiculously big.
 
-* Vertical Partition: This is partition by features
-* Key-based or Hash-based Partition: This allocates data by hashing them and put
+#### Advantages:
+  * __High availability__: If one server goes down, the others still operate
+  * __Faster queries__: Smaller amounts of data in each user group mean faster querying
+  * __More write bandwidth__: With no master database serializing writes, machines can
+  write in parallel which increases the write throughput. Writing is a major bottleneck
+  for many websites.
+  * __Do more work__: A parallel backend means more work can be done simultaneously.
+  You can handle higher user loads, especially when writing data, because there are parallel
+  paths through your system. You can load balance web servers, which access shards over
+  different network paths, which are processed by separate CPUs, which use separate caches
+  of RAM and separate disk IO paths to process work.
+
+__Vertical Partition__: This is partition by features
+
+__Key-based or Hash-based Partition__: This allocates data by hashing them and put
 them on different machines but adding additional servers means re-allocating
 all the data - very expensive task. Use __consistent hashing__ !
-* Directory-based Partition: Maintain a lookup table for where the data can
+
+__Directory-based Partition__: Maintain a lookup table for where the data can
 be found.
 
 ![partition]
 [partition]: ../img/partition.png
+
+#### Sharding vs Traditional Architectures
+* __Data are denormalized__: Traditionally we normalized data. Data are splayed out into anomaly-less tables and then joined back together again when they need to be used. In sharding the data re denormalized. You store togeher data that are used together.
+
+* __Data are parallelized across many physical instances__: With sharding, the data are parallelized and you scale by scaling out instead of up.
+
+* __Data are kept small__: By isolating data into smaller shards, the data you are accessing is more likely to stay in cache.
+
+* __Data are more highly available__: Since the shards are independent, a failure in one doesn't cause failure in another. You can also set up a shard to have a master-slave or dual-master relationship within the shard to avoid a single point failure.
+
+* __It doesn't use replication__: Replicating data from a master server to slave servers is a traditional approach to scaling. Data is written to a master server and then replicated to one or more slave servers. At that point, read operations can be handled by the slaves, but all writes happen on the master. Obviously the master becomes the write bottleneck. Sharding cleanly and elegantly solves the problem with replication.
+
+#### Disadvantage:
+  * __Rebalancing data__: What happens when a shard outgrows your storage and needs to be split? Let's say some user has a particularly large friends list that blows your storage capacity for the shard. You need to move the user to a different shard. You had to build out the data center correctly from the start because moving data from shard to shard requires a lot of downtime.
+  * __Joining data__ from multiple shards: With sharding you can't just issue a query and get back all the data.
+  * __How do you partition your data in shards?__
+  * Less leverage, smaller community
+  * Poor support for implementation
 
 ### Relational databases are bad at scaling write
 Traditional ACID-compliant databases like RDBSM can scale reads using master-slave approach, but due to constraints imposed by the ACID principle, scaling write is very difficult.
@@ -394,9 +425,10 @@ in a denormalized table, the pet information is stored on the persons table.
 | Fast data retrieval since we do fewer joins | Updates and inserts are more expensive        |
 | Simpler queries, fewer tables               | Update and insert code are difficult to write |
 |                                             | Data may become inconsistent                  |
-|                                             | Redudancy leads to more space usage           |
+|                                             | Redundancy leads to more space usage           |
 
-__Misconception__: NoSQL doesn't mean No SQL at all, it means Not Only SQL. Thus, NoSQL database actually can do JOINs and relational query
+__Misconception__: NoSQL doesn't mean No SQL at all, it means Not Only SQL. Thus, NoSQL database
+actually can do JOINs and relational query
 
 ### NoSQL
 If you're dealing with phenomenally huge amount of data, it can be too tedious and the probability of error increases. In that situation, you may need to consider going with a non-relational database. A non-relational database just stores data without explicit and structured mechanisms to link data from different tables to one another.
@@ -419,10 +451,13 @@ you can theoretically shard it forever. Sharding distributes the data across par
 to overcome hardware limitations.
 
 #### Disadvantage
-In non-relational databases like Mongo, there are no joins like there would be in relational databases. This means you need to perform multiple queries and join the data manually within your code -- and that can get very ugly, very fast.
+In non-relational databases like Mongo, there are no joins like there would be in relational databases.
+This means you need to perform multiple queries and join the data manually within your code -- and
+that can get very ugly, very fast.
 
-Since Mongo doesn’t automatically treat operations as transactions the way a relational database does, you must manually choose to create a transaction and then manually verify it, manually commit it or roll it back.
-
+Since Mongo doesn’t automatically treat operations as transactions the way a relational database does,
+you must manually choose to create a transaction and then manually verify it, manually commit it
+or roll it back.
 
 #### More Examples
 * Reddis - k-v store, a giant hash map

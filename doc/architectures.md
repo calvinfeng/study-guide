@@ -1,5 +1,4 @@
 # Real Life Examples
-
 ## Instagram
 ### Core Principles
 * Keep it very simple
