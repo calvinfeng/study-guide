@@ -23,27 +23,27 @@ in every round of iteration. This implementation did not use __PriorityQueue__,
 it used hash map for frontiers for the sake of simplicity.
 ``` ruby
 def dijkstra(source)
-  considered_paths = {}
-  frontiers = {
-    source => {cost: 0, last_edge: nil}
-  }
-  until frontiers.empty?
-    vertex = select_frontier(frontiers)
-    considered_paths[vertex] = frontiers[vertex]
-    frontiers.delete(vertex)
-    update_frontiers(vertex, considered_paths, frontiers)
-  end
-  considered_paths
+    considered_paths = {}
+    frontiers = {
+        source => {cost: 0, last_edge: nil}
+    }
+    until frontiers.empty?
+        vertex = select_frontier(frontiers)
+        considered_paths[vertex] = frontiers[vertex]
+        frontiers.delete(vertex)
+        update_frontiers(vertex, considered_paths, frontiers)
+    end
+    considered_paths
 end
 ```
 For the lack of __PriorityQueue__, one must iterate through the hash through
 enumerable method and find the vertex with minimum cost. This is O(|V|) time.
 ``` ruby
 def select_frontier(frontiers)
-  vertex, data = frontiers.min_by do |vertex, data|
-    data[:cost]
-  end
-  vertex
+    vertex, data = frontiers.min_by do |vertex, data|
+        data[:cost]
+    end
+    vertex
 end
 ```
 This will look at a vertex's out going edges and find the reachable vertices.
@@ -55,17 +55,17 @@ in the queue, and the cost to reach B is lower through other vertices, do nothin
 and move on.
 ``` ruby
 def update_frontiers(vertex, considered_paths, frontiers)
-  path_to_vertex_cost = considered_paths[vertex][:cost]
-  vertex.out_edges.each do |edge|
-    neighbor = edge.to_vertex
-    next if considered_paths.has_key?(neighbor)
-    extended_path_cost = path_to_vertex_cost + edge.cost
-    if frontiers.has_key?(neighbor) && frontiers[neighbor][:cost] <= extended_path_cost
-      next
-    else
-      frontiers[neighbor] = {cost: extended_path_cost, last_edge: edge}
+    path_to_vertex_cost = considered_paths[vertex][:cost]
+    vertex.out_edges.each do |edge|
+        neighbor = edge.to_vertex
+        next if considered_paths.has_key?(neighbor)
+        extended_path_cost = path_to_vertex_cost + edge.cost
+        if frontiers.has_key?(neighbor) && frontiers[neighbor][:cost] <= extended_path_cost
+            next
+        else
+            frontiers[neighbor] = {cost: extended_path_cost, last_edge: edge}
+        end
     end
-  end
 end
 ```
 
@@ -75,18 +75,19 @@ Notes
 * __gray__: locked_in nodes
 
 ![example][dijkstra]
+
 [dijkstra]: ../img/dijkstra.png
 
 Here are the steps
 1. `frontiers` => {A: 0}
 2. `frontiers` => {B: 2, C: 5}, `locked` => {A: 0}
-  * Pick out `B` from frontiers and check its neighbors
+* Pick out `B` from frontiers and check its neighbors
 3. `frontiers` => {C: 5, D: 7, E: 12}, `locked` => {A: 0, B: 2}
-  * Pick out `C` from frontiers and check its neighbors
+* Pick out `C` from frontiers and check its neighbors
 4. `frontiers` => {D: 7, E: 12}, `locked` => {A: 0, B: 2, C: 5}
-  * Pick out `D` from frontiers and check its neighbors
-  * Update `E` because it is cheaper to reach E from A -> B -> D -> E than
-  from A -> B -> E
+* Pick out `D` from frontiers and check its neighbors
+* Update `E` because it is cheaper to reach E from A -> B -> D -> E than
+from A -> B -> E
 5. `frontiers` => {E: 10}, `locked` => {A: 0, B: 2, C: 5, D: 7}
-  * Take `E` out and there is no neighbors, iteration ends
+* Take `E` out and there is no neighbors, iteration ends
 6. Final result {A: 0, B: 2, C: 5, D: 7, E: 10}
